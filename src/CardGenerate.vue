@@ -71,13 +71,6 @@
                 props.race,
                 props.secondRace,
                 props.chosen);
-      console.log(props.attack, 
-                props.health, 
-                props.rune, 
-                props.race,
-                props.secondRace, 
-                props.isEnabled, 
-                props.chosen);
     }
   },
   {
