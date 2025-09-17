@@ -1,5 +1,5 @@
 <script setup>
-  import { onMounted, ref, computed} from 'vue';
+  import { onMounted, ref, computed, watch} from 'vue';
 
   const props = defineProps({
     name: String,
@@ -16,21 +16,6 @@
 
     imgUrl: String
   })
-
-  //导入图片
-  const imgModule = import.meta.glob("@/assets/img/*.png", { eager: true });
-  const img = ref([]);
-
-  for(let path in imgModule){
-    let imgName = path.match(/([^/]*?)\.[^/.]+$/)[1]; //提取文件名以便后续引用
-    let imgElement = new Image();
-    imgElement.src = imgModule[path].default;
-
-    img.value.push({
-      name: imgName,
-      element: imgElement
-    })
-  }
 
   const loaded = ref(false);
 
@@ -68,7 +53,8 @@
   })
   })
 
-  const drawing = computed(() => {
+  watch(
+    [props, loaded], () => {
     if(loaded.value && fctx.value !== null && tctx.value !== null){
       drawFrame(props.attack, 
                 props.health, 
@@ -85,9 +71,19 @@
                 props.race,
                 props.secondRace,
                 props.chosen);
+      console.log(props.attack, 
+                props.health, 
+                props.rune, 
+                props.race,
+                props.secondRace, 
+                props.isEnabled, 
+                props.chosen);
     }
-    return "";
-  });
+  },
+  {
+    deep: true
+  }
+);
 
   const illustrating = computed(() => {
     if(loaded.value && props.imgUrl !== ""){
@@ -95,10 +91,6 @@
     }
     return "";
   })
-
-  function getImg(val){
-    return img.value.find(item => item.name === val).element;
-  }
 
   function strLength(str){ //中文2字符，西文1字符
     let len = 0;
@@ -132,7 +124,52 @@
     return result;
   }
 
-  function drawEmblem(ra, ena, cho){
+  /*
+  for(let path in imgModule){
+    let imgName = path.match(/([^/]*?)\.[^/.]+$/)[1]; //提取文件名以便后续引用
+    let imgElement = new Image();
+    imgElement.src = imgModule[path].default;
+
+    img.value.push({
+      name: imgName,
+      element: imgElement
+    })
+  }
+    */
+  //导入图片
+  const imgModule = import.meta.glob("@/assets/img/*.png");
+  const img = ref([]);
+
+  async function getImg(val){
+    const loadedImg = img.value.find((obj) => obj.name === val);
+    if(loadedImg){
+      return loadedImg.element;
+    }
+
+    for(let path in imgModule){
+      let imgName = path.match(/([^/]*?)\.[^/.]+$/)[1];
+      if(imgName === val){
+        let imgElement = new Image();
+        const module = await imgModule[path]();
+        const imgUrl = module.default;
+
+        await new Promise((resolve, reject) => {
+          imgElement.onload = resolve;
+          imgElement.onerror = reject;
+          imgElement.src = imgUrl;
+        });
+
+        img.value.push({
+          name: imgName,
+          element: imgElement
+        })
+        return imgElement;
+      }
+    }
+    //return img.value.find(item => item.name === val).element;
+  }
+
+  async function drawEmblem(ra, ena, cho){
     const c1 = document.createElement("canvas"),
           c2 = document.createElement("canvas");
     const w = c1.width = c2.width = 540, h = c1.height = c2.height = 670;
@@ -142,7 +179,7 @@
     let y = (ra !== "" && (cho.type === "minion" || cho.type === "spell")) ? -10 : 0;
     let dx, dy, scale;
 
-    const emblem = ena.mini ? getImg(`emblem-${cho.emblem}-mini`) : getImg(`emblem-${cho.emblem}`);
+    const emblem = ena.mini ? await getImg(`emblem-${cho.emblem}-mini`) : await getImg(`emblem-${cho.emblem}`);
 
     switch(cho.type){
       case "minion":
@@ -284,75 +321,75 @@
     }
   }
 
-  function drawFrame(atk, hp, ru, ra, secRa, ena, cho){
+  async function drawFrame(atk, hp, ru, ra, secRa, ena, cho){
 
     fctx.value.clearRect(0, 0, width.value, height.value);
 
     if(cho.type !== "power"){
       
       if(ena.secondClass){
-        fctx.value.drawImage(getImg(`${cho.type}-left-${cho.class}`), 0, 0);
-        fctx.value.drawImage(getImg(`${cho.type}-right-${cho.secondClass}`), 0, 0);
+        fctx.value.drawImage(await getImg(`${cho.type}-left-${cho.class}`), 0, 0);
+        fctx.value.drawImage(await getImg(`${cho.type}-right-${cho.secondClass}`), 0, 0);
       } else{
-        fctx.value.drawImage(getImg(`${cho.type}-${cho.class}`), 0, 0);
+        fctx.value.drawImage(await getImg(`${cho.type}-${cho.class}`), 0, 0);
       }
 
       if(cho.type === "location"){
-        fctx.value.drawImage(getImg("location-border"), 0, 0);
+        fctx.value.drawImage(await getImg("location-border"), 0, 0);
       }
       
       if(ena.dragon){
-        fctx.value.drawImage(getImg(`${cho.type}-dragon`), 0, 0);
+        fctx.value.drawImage(await getImg(`${cho.type}-dragon`), 0, 0);
       }
 
       if(ena.multiClass){
-        fctx.value.drawImage(getImg("multi-class"), 0, 0);
-        fctx.value.drawImage(getImg(`camp-${cho.multiClass}`), 0, 0);
+        fctx.value.drawImage(await getImg("multi-class"), 0, 0);
+        fctx.value.drawImage(await getImg(`camp-${cho.multiClass}`), 0, 0);
       }
 
-      fctx.value.drawImage(getImg(`${cho.type}-text`), 0, 0);
+      fctx.value.drawImage(await getImg(`${cho.type}-text`), 0, 0);
 
       if(cho.type === "minion" || cho.type === "spell"){
         if(ra !== "" && secRa !== ""){
-          fctx.value.drawImage(getImg(`minion-second-race`), 0, 0);
+          fctx.value.drawImage(await getImg(`minion-second-race`), 0, 0);
         } else if(ra !== "" || secRa !== ""){
-          fctx.value.drawImage(getImg(`${cho.type}-race`), 0, 0);
+          fctx.value.drawImage(await getImg(`${cho.type}-race`), 0, 0);
         }
       }
       
       if(cho.rarity !== "free"){
-        fctx.value.drawImage(getImg(`${cho.type}-ra-base`), 0, 0);
-        fctx.value.drawImage(getImg(`${cho.type}-ra-${cho.rarity}`), 0, 0);
+        fctx.value.drawImage(await getImg(`${cho.type}-ra-base`), 0, 0);
+        fctx.value.drawImage(await getImg(`${cho.type}-ra-${cho.rarity}`), 0, 0);
       }
 
       if(cho.emblem !== "none"){
         drawEmblem(ra, ena, cho);
       }
       
-      fctx.value.drawImage(getImg(`${cho.type}-name`), 0, 0);
+      fctx.value.drawImage(await getImg(`${cho.type}-name`), 0, 0);
       
       if(cho.banner !== "none"){
-        fctx.value.drawImage(getImg(`ba-${cho.banner}`), 0, 0)
+        fctx.value.drawImage(await getImg(`ba-${cho.banner}`), 0, 0)
       }
 
       
       let runes = sortRunes(ru), completed = 0;
       if(runes[3] > 0 && runes[3] <= 3){
-        fctx.value.drawImage(getImg("ru-base"),0, 0);
-        runes.forEach(obj => {
+        fctx.value.drawImage(await getImg("ru-base"),0, 0);
+        for(let obj of runes){
           for(let i = 0; i < obj.value; i++){
             switch(runes[3]){
               case 1:
               case 2:
-                fctx.value.drawImage(getImg(`ru-${obj.key}-${completed + i + 1}`), 0, 0);
+                fctx.value.drawImage(await getImg(`ru-${obj.key}-${completed + i + 1}`), 0, 0);
                 break;
               case 3:
-                fctx.value.drawImage(getImg(`ru-${obj.key}-${completed + i + 1}-3`), 0, 0);
+                fctx.value.drawImage(await getImg(`ru-${obj.key}-${completed + i + 1}-3`), 0, 0);
                 break;
             }
           }
           completed += obj.value;
-        })
+        }
       }
       
       if(cho.type === "location"){
@@ -360,30 +397,30 @@
         fctx.value.shadowColor = "rgba(0, 0, 0, 0.3";
         fctx.value.shadowOffsetX = 6;
         fctx.value.shadowOffsetY = 6;
-        fctx.value.drawImage(getImg("cost"), 0, 8);
+        fctx.value.drawImage(await getImg("cost"), 0, 8);
         
         fctx.value.shadowColor = "transparent";
       } else{
-        fctx.value.drawImage(getImg("cost"), 0, 0);
+        fctx.value.drawImage(await getImg("cost"), 0, 0);
       }
 
       if(atk !== '' && (cho.type === "minion" || cho.type === "weapon")){
-        fctx.value.drawImage(getImg(`${cho.type}-atk`), 0, 0);
+        fctx.value.drawImage(await getImg(`${cho.type}-atk`), 0, 0);
       }
       if(hp !== ''){
         switch(cho.type){
           case "minion":
-            fctx.value.drawImage(getImg(`minion-hp`), 0, 0); break;
+            fctx.value.drawImage(await getImg(`minion-hp`), 0, 0); break;
           case "weapon":
           case "location":
-            fctx.value.drawImage(getImg(`weapon-hp`), 0, 0); break;
+            fctx.value.drawImage(await getImg(`weapon-hp`), 0, 0); break;
           case "hero":
-            fctx.value.drawImage(getImg(`hero-hp`), 0, 0);
+            fctx.value.drawImage(await getImg(`hero-hp`), 0, 0);
         }
       }
     } else if(cho.type === "power"){
-      fctx.value.drawImage(getImg("power-base"), 0, 0);
-      fctx.value.drawImage(getImg("power-cost"), 0, 0);
+      fctx.value.drawImage(await getImg("power-base"), 0, 0);
+      fctx.value.drawImage(await getImg("power-cost"), 0, 0);
     }
   }
 
@@ -1246,7 +1283,6 @@
     <canvas id="illustration" width="540" height="670"></canvas>
     <canvas id="card" width="540" height="670"></canvas>
     <canvas id="text" width="540" height="670"></canvas>
-    <div>{{ drawing }}</div>
     <div>{{ illustrating }}</div>
     <div id="test"></div>
     <div id="hidden"></div>
