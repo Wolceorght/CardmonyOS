@@ -621,7 +621,7 @@
     const ns = "http://www.w3.org/2000/svg";
     const leftShape = document.createElement("div");
     const rightShape = document.createElement("div");
-    let size, color, x, y, h;
+    let size, color, x, y, w, h;
 
     const len = strLength(te);
 
@@ -766,7 +766,7 @@
 
     switch(type){
       case "minion":
-        x = 121, y = 454, h = 128;
+        x = 121, y = 454, w = 300, h = 128;
 
         textBox.style.width = "300px";
         textBox.style.height = "128px";
@@ -797,7 +797,7 @@
         break;
 
       case "spell":
-        x = 135.5, y = 460, h = 128;
+        x = 135.5, y = 460, w = 262, h = 128;
 
         textBox.style.width = "262px";
         textBox.style.height = "128px";
@@ -835,7 +835,7 @@
         break;
 
       case "weapon":
-        x = 142, y = 454, h = 134;
+        x = 142, y = 454, w = 254, h = 134;
 
         textBox.style.width = "254px";
         textBox.style.height = "134px";
@@ -878,7 +878,7 @@
         break;
       
       case "location":
-        x = 138, y = 464, h = 122;
+        x = 138, y = 464, w = 260, h = 122;
 
         textBox.style.width = "260px";
         textBox.style.height = "122px";
@@ -916,7 +916,7 @@
         break;
 
       case "hero":
-        x = 142, y = 450, h = 128;
+        x = 142, y = 450, w = 254, h = 128;
         
         textBox.style.width = "254px";
         textBox.style.height = "128px";
@@ -954,7 +954,7 @@
         break;
 
       case "power":
-        x = 137, y = 434, h = 128;
+        x = 137, y = 434, w = 256, h = 128;
         color = "#000";
 
         textBox.style.width = "256px";
@@ -1021,12 +1021,13 @@
     }
     
     const svgStr = new XMLSerializer().serializeToString(svg);
-    const svgBlob = new Blob([svgStr], {type: "image/svg+xml;charset=utf-8"});
-    const svgURL = URL.createObjectURL(svgBlob);
+    //const svgBlob = new Blob([svgStr], {type: "image/svg+xml;charset=utf-8"});
+    //const svgURL = URL.createObjectURL(svgBlob);
+    const svgURL = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgStr);
 
     const svgImg = new Image();
     svgImg.onload = () => {
-      tctx.value.drawImage(svgImg, x + "", y + "");
+      tctx.value.drawImage(svgImg, x, y, w, h);
       //hidden.removeChild(svg);
     }
     svgImg.src = svgURL;
