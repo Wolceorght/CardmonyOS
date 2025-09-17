@@ -605,15 +605,13 @@
     const svgStr = new XMLSerializer().serializeToString(svg);
     const svgBlob = new Blob([svgStr], {type: "image/svg+xml;charset=utf-8"});
     const svgURL = URL.createObjectURL(svgBlob);
-
+    console.log(svgStr);
+    
     const svgImg = new Image();
     svgImg.onload = () => {
-      tctx.value.drawImage(svgImg, x + "", y + "");
+      tctx.value.drawImage(svgImg, x, y);
     }
     svgImg.src = svgURL;
-
-    //const test = document.getElementById("test");
-    //test.appendChild(svg);
   }
 
   function drawText(te, type){
@@ -627,8 +625,6 @@
 
     const textBox = document.createElement("div");
     const textContent = document.createElement("p");
-    textBox.setAttribute("xmlns", ns);
-    textContent.setAttribute("xmlns", ns);
     textContent.innerHTML = te;
 
     const boldText = textContent.querySelectorAll("b");
@@ -639,7 +635,11 @@
     }
     boldText.forEach(element => {
       element.style.fontWeight = "400";
-      const strokeWidth = "0.02em";
+      let strokeWidth = "0.05em";
+      const userAgent = navigator.userAgent;
+      if(userAgent.indexOf("Firefox") > -1){
+        strokeWidth = "0.02em";
+      } 
       element.style.textShadow = `0 0 ${strokeWidth} ${color},
                                   0 0 ${strokeWidth} ${color}`;
     })
@@ -1021,14 +1021,13 @@
     }
     
     const svgStr = new XMLSerializer().serializeToString(svg);
-    //const svgBlob = new Blob([svgStr], {type: "image/svg+xml;charset=utf-8"});
-    //const svgURL = URL.createObjectURL(svgBlob);
-    const svgURL = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgStr);
+    const svgBlob = new Blob([svgStr], {type: "image/svg+xml;charset=utf-8"});
+    const svgURL = URL.createObjectURL(svgBlob);
 
     const svgImg = new Image();
     svgImg.onload = () => {
       tctx.value.drawImage(svgImg, x, y, w, h);
-      //hidden.removeChild(svg);
+      hidden.removeChild(svg);
     }
     svgImg.src = svgURL;
   }
