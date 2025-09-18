@@ -17,7 +17,8 @@
     imgUrl: String
   })
 
-  const loaded = ref(false);
+  const loaded = ref(false), 
+        fontLoaded = ref(false);
 
   const f = ref(null),
         t = ref(null),
@@ -29,6 +30,17 @@
         height = ref('');
   
   onMounted(() => {
+    //强制加载 canvas 使用的字体
+    const nameFont = new FontFace("AR LisuGB Medium", "url(src/assets/font/ARLisuGB-Medium.woff2)");
+    const textFont = new FontFace("BlizzardGlobal", "url(src/assets/font/BlizzardGlobal.woff2)");
+    document.fonts.add(nameFont);
+    document.fonts.add(textFont);
+    nameFont.load();
+    textFont.load();
+    document.fonts.ready.then(() => {
+      fontLoaded.value = true;
+    })
+    
     f.value = document.getElementById("card"),
     t.value = document.getElementById("text"),
     i.value = document.getElementById("illustration");
@@ -54,8 +66,8 @@
   })
 
   watch(
-    [props, loaded], () => {
-    if(loaded.value && fctx.value !== null && tctx.value !== null){
+    [props, loaded, fontLoaded], () => {
+    if(loaded.value && fontLoaded.value && fctx.value !== null && tctx.value !== null){
       drawFrame(props.attack, 
                 props.health, 
                 props.rune, 
@@ -605,11 +617,11 @@
     const svgStr = new XMLSerializer().serializeToString(svg);
     const svgBlob = new Blob([svgStr], {type: "image/svg+xml;charset=utf-8"});
     const svgURL = URL.createObjectURL(svgBlob);
-    console.log(svgStr);
     
     const svgImg = new Image();
     svgImg.onload = () => {
       tctx.value.drawImage(svgImg, x, y);
+      URL.revokeObjectURL(svgURL);
     }
     svgImg.src = svgURL;
   }
@@ -1027,6 +1039,7 @@
     const svgImg = new Image();
     svgImg.onload = () => {
       tctx.value.drawImage(svgImg, x, y, w, h);
+      URL.revokeObjectURL(svgURL);
       hidden.removeChild(svg);
     }
     svgImg.src = svgURL;
