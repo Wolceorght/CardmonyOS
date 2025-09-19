@@ -31,8 +31,8 @@
   
   onMounted(() => {
     //强制加载 canvas 使用的字体
-    const nameFont = new FontFace("AR LisuGB Medium", "url(/font/ARLisuGB-Medium.woff2)");
-    const textFont = new FontFace("BlizzardGlobal", "url(/font/BlizzardGlobal.woff2)");
+    const nameFont = new FontFace("AR LisuGB Medium", "url(/font/ARLisuGB-Medium.woff2)", {display: "block"});
+    const textFont = new FontFace("BlizzardGlobal", "url(/font/BlizzardGlobal.woff2)", {display: "block"});
     document.fonts.add(nameFont);
     document.fonts.add(textFont);
     nameFont.load();
