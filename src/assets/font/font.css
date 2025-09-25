@@ -11,3 +11,15 @@
     font-display: swap;
     src: url("Inter-Medium.woff2") format(woff2);
 }
+
+@font-face {
+    font-family: "AR LisuGB Medium";
+    font-display: block;
+    src: url("ARLisuGB-Medium.woff2") format(woff2);
+}
+
+@font-face {
+    font-family: "BlizzardGlobal";
+    font-display: block;
+    src: url("BlizzardGlobal.woff2") format(woff2);
+}

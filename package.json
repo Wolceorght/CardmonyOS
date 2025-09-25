@@ -12,6 +12,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@zumer/snapdom": "^1.9.11",
+    "canvg": "^4.0.3",
+    "html2canvas": "^1.4.1",
     "vue": "^3.5.18"
   },
   "devDependencies": {

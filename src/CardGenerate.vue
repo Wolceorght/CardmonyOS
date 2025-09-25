@@ -1,5 +1,6 @@
 <script setup>
-  import { onMounted, ref, computed, watch} from 'vue';
+  import { onMounted, ref, computed, watch } from 'vue';
+  import { snapdom } from '@zumer/snapdom';
 
   const props = defineProps({
     name: String,
@@ -17,8 +18,7 @@
     imgUrl: String
   })
 
-  const loaded = ref(false), 
-        fontLoaded = ref(false);
+  const loaded = ref(false);
 
   const f = ref(null),
         t = ref(null),
@@ -30,6 +30,7 @@
         height = ref('');
   
   onMounted(() => {
+    /*
     //强制加载 canvas 使用的字体
     const nameFont = new FontFace("AR LisuGB Medium", "url(/font/ARLisuGB-Medium.woff2)", {display: "block"});
     const textFont = new FontFace("BlizzardGlobal", "url(/font/BlizzardGlobal.woff2)", {display: "block"});
@@ -37,9 +38,11 @@
     document.fonts.add(textFont);
     nameFont.load();
     textFont.load();
+    
     document.fonts.ready.then(() => {
       fontLoaded.value = true;
     })
+    */
     
     f.value = document.getElementById("card"),
     t.value = document.getElementById("text"),
@@ -66,8 +69,8 @@
   })
 
   watch(
-    [props, loaded, fontLoaded], () => {
-    if(loaded.value && fontLoaded.value && fctx.value !== null && tctx.value !== null){
+    [props, loaded], () => {
+    if(loaded.value && fctx.value !== null && tctx.value !== null){
       drawFrame(props.attack, 
                 props.health, 
                 props.rune, 
@@ -476,7 +479,7 @@
     */
   }
 
-  function drawStrokedName(str, type){
+  async function drawStrokedName(str, type){
     const ns = "http://www.w3.org/2000/svg";
     const svg = document.createElementNS(ns, "svg");
     const svgPath = document.createElementNS(ns, "path");
@@ -484,7 +487,7 @@
     const svgTextPath = document.createElementNS(ns, "textPath");
     const svgTextNode = document.createTextNode(str);
     
-    let size = 36, x, y, dy1, dy2;
+    let size = 36, x, y, w, h, dy1, dy2;
     let nameLength = strLength(str);
     
     svgPath.setAttribute("id", "path");
@@ -493,14 +496,15 @@
     switch(type){
       case "minion":
         x = 108.57, y = 349.56;
+        w = 320, h = 70;
         dy1 = .75, dy2 = .25;
 
-        svg.setAttribute("width", "320");
-        svg.setAttribute("height", "70");
-        svg.setAttribute("viewBox", "-160 -35 320 70");
-        svg.setAttribute("style", "transform-style: perserve-3d; transform: perspective(100px) rotateX(3deg) rotateY(-1deg);");
+        svg.setAttribute("width", w);
+        svg.setAttribute("height", h);
+        svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
+        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(3deg) rotateY(-1deg);");
 
-        svgPath.setAttribute("d", "M -163.4258 14.2913 c 0 0 27.5931 12.4401 95.976 -5.6277 c 60.9181 -15.9944 117.4373 -19.993 138.8986 -19.993 c 21.328 0 62.3844 3.11 86.9116 19.993");
+        svgPath.setAttribute("d", "M-165.0601 14.4342c0 0 27.869 12.5645 96.9358-5.684 61.5273-16.1543 118.6117-20.1929 140.2876-20.1929 21.5413 0 63.0082 3.1411 87.7807 20.1929");
 
         svgText.setAttribute("letter-spacing", ".01em");
         svgText.setAttribute("dy", "6.67");
@@ -510,12 +514,13 @@
 
       case "spell":
         x = 83, y = 347.9;
+        w = 380, h = 61;
         dy1 = .9, dy2 = .3;
 
-        svg.setAttribute("width", "380");
-        svg.setAttribute("height", "61");
-        svg.setAttribute("viewBox", "-190 -30.5 380 61");
-        svg.setAttribute("style", "transform-style: perserve-3d; transform: perspective(100px) rotateX(1deg);");
+        svg.setAttribute("width", w);
+        svg.setAttribute("height", h);
+        svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
+        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(1deg);");
 
         svgPath.setAttribute("d", "M -190 29.485 c 0 0 94.9096 -30.9256 189.9525 -30.9256 c 94.9096 0 189.9525 31.992 189.9525 31.992");
         
@@ -525,15 +530,16 @@
 
       case "weapon":
         x = 108.9, y = 352.98;
+        w = 324, h = 49;
         dy1 = .9, dy2 = .3;
         size = 36;
         
-        svg.setAttribute("width", "324");
-        svg.setAttribute("height", "49");
-        svg.setAttribute("viewBox", "-162 -24.5 324 49");
-        svg.setAttribute("style", "transform-style: perserve-3d; transform: perspective(100px) rotateX(-.5deg);");
+        svg.setAttribute("width", w);
+        svg.setAttribute("height", h);
+        svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
+        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(-.5deg);");
         
-        svgPath.setAttribute("d", "M -162.2666 6.0257 H 161.919");
+        svgPath.setAttribute("d", "M-165.5119 6.1462H165.1574");
 
         svgText.setAttribute("letter-spacing", ".005em");
         svgText.setAttribute("stroke-width", "5.5");
@@ -541,12 +547,13 @@
 
       case "location":
         x = 106, y = 356.4;
-        dy1 = .9, dy2 = .3;
+        w = 342, h = 51;
+        dy1 = .75, dy2 = .25;
 
-        svg.setAttribute("width", "342");
-        svg.setAttribute("height", "51");
-        svg.setAttribute("viewBox", "-171 -25.5 342 51");
-        svg.setAttribute("style", "transform-style: perserve-3d; transform: perspective(100px) rotateX(1.5deg);");
+        svg.setAttribute("width", w);
+        svg.setAttribute("height", h);
+        svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
+        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(1.5deg);");
 
         svgPath.setAttribute("d", "M-171-4.6605c0 0 69.9825 21.8345 170.8906 22.1145 2.666 0 5.4653 0 8.1313 0 29.7259-.2799 56.7858-1.2597 80.2466-4.6188 40.3899-5.7386 65.7169-12.4569 82.1128-17.4956");
 
@@ -556,13 +563,14 @@
 
       case "hero":
         x = 100.05, y = 345.02;
+        w = 339, h = 83;
         dy1 = .9, dy2 = .3;
         size = 38.5;
 
-        svg.setAttribute("width", "339");
-        svg.setAttribute("height", "83");
-        svg.setAttribute("viewBox", "-169.5 -41.5 339 83");
-        svg.setAttribute("style", "transform-style: perserve-3d; transform: perspective(100px) rotateX(-1deg);");
+        svg.setAttribute("width", w);
+        svg.setAttribute("height", h);
+        svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
+        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(-1deg);");
 
         svgPath.setAttribute("d", "M-177.5551 40.7461c0 0 169.6376-107.8397 355.5111-.2666");
 
@@ -573,13 +581,14 @@
       
       case "power":
         x = 125, y = 340;
+        w = 292 , h = 38;
         dy1 = .9, dy2 = .3;
         size = 31.82;
         
-        svg.setAttribute("width", "292");
-        svg.setAttribute("height", "38");
-        svg.setAttribute("viewBox", "-146 -19 292 38");
-        svg.setAttribute("style", "transform-style: perserve-3d; transform: perspective(100px);");
+        svg.setAttribute("width", w);
+        svg.setAttribute("height", h);
+        svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
+        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px);");
 
         svgPath.setAttribute("d", "M-146 11.9256h291.927");
         
@@ -613,22 +622,95 @@
     svgText.appendChild(svgTextPath);
     svg.appendChild(svgPath);
     svg.appendChild(svgText);
+    const nameBox = document.createElement("div");
+    nameBox.appendChild(svg);
 
+    const hidden = document.getElementById("hidden");
+    hidden.appendChild(nameBox);
+
+    const nameCanvas = await snapdom.toCanvas(nameBox, {
+      width: w,
+      height: h,
+      dpr: 1,
+      embedFonts: true,
+      excludeFonts: {
+        families: ["Inter", "BlizzardGlobal"]
+      }
+    });
+    tctx.value.drawImage(nameCanvas, x, y);
+    hidden.removeChild(nameBox);
+
+    /*
+    const c1 = document.createElement("canvas"),
+          c2 = document.createElement("canvas");
+    const ctx1 = c1.getContext("2d"),
+          ctx2 = c2.getContext("2d");
+    c1.width = c2.width = w, c1.height = c2.height = h;
+    
+    const svgStr1 = new XMLSerializer().serializeToString(svg);
+    const v1 = await Canvg.from(ctx1, svgStr1);
+    await v1.render();
+
+    svgText.setAttribute("stroke-width", "0");
+
+    const svgStr2 = new XMLSerializer().serializeToString(svg);
+    const v2 = await Canvg.from(ctx2, svgStr2);
+    await v2.render();
+    
+    ctx1.drawImage(c2, 0, 0);
+
+    c1.style.setProperty("transform", "perspective(100px) rotateX(3deg) rotateY(-1deg)");
+    const c1Box = document.createElement("div");
+    const hidden = document.getElementById("hidden");
+    c1Box.appendChild(c1);
+    hidden.appendChild(c1Box); 
+
+    const nameCanvas = await snapdom.toCanvas(c1Box, {
+      width: w,
+      height: h,
+      dpr: 1
+    });
+    tctx.value.drawImage(nameCanvas, x, y);
+    
+    hidden.removeChild(c1Box);
+    */
+
+    /* // html2canvas solution
+    const box = document.getElementById("box"); 
+    box.style.setProperty("zoom", "1"); 
+
+    html2canvas(c1, {
+      backgroundColor: null,
+      width: w,
+      height: h,
+      x: 0,
+      y: 0,
+      scale: 1
+    }).then((nameCanvas) => {
+      tctx.value.drawImage(nameCanvas, x, y);
+    })
+
+    box.style.setProperty("zoom", ".75");
+    */
+    
+    /* // XMLSerializer solution
     const svgStr = new XMLSerializer().serializeToString(svg);
     const svgBlob = new Blob([svgStr], {type: "image/svg+xml;charset=utf-8"});
     const svgURL = URL.createObjectURL(svgBlob);
-    
+
     const svgImg = new Image();
     svgImg.onload = () => {
+      test.appendChild(svgImg);
       tctx.value.drawImage(svgImg, x, y);
       URL.revokeObjectURL(svgURL);
     }
     svgImg.src = svgURL;
+    */
   }
 
-  function drawText(te, type){
+  async function drawText(te, type){
 
-    const ns = "http://www.w3.org/2000/svg";
+    //const ns = "http://www.w3.org/2000/svg";
     const leftShape = document.createElement("div");
     const rightShape = document.createElement("div");
     let size, color, x, y, w, h;
@@ -647,11 +729,11 @@
     }
     boldText.forEach(element => {
       element.style.fontWeight = "400";
-      let strokeWidth = "0.05em";
+      let strokeWidth = ".05em";
       const userAgent = navigator.userAgent;
-      if(userAgent.indexOf("Firefox") > -1){
-        strokeWidth = "0.02em";
-      } 
+      if(userAgent.indexOf("Firefox") !== -1){
+        strokeWidth = ".02em";
+      }
       element.style.textShadow = `0 0 ${strokeWidth} ${color},
                                   0 0 ${strokeWidth} ${color}`;
     })
@@ -662,10 +744,8 @@
     textContent.style.letterSpacing = ".01em";
     textContent.style.lineBreak = "strict";
 
-    const svg = document.createElementNS(ns, "svg");
-    const svgText = document.createElementNS(ns, "foreignObject");
-    
-    const hidden = document.getElementById("hidden");
+    //const svg = document.createElementNS(ns, "svg");
+    //const svgText = document.createElementNS(ns, "foreignObject");
 
     const sizeSet = [
       {
@@ -801,11 +881,6 @@
         //rightShape.style.clipPath = "circle(50px at 128px 135px)"
         rightShape.style.shapeOutside = "circle(50px at 128px 135px)";
         
-        svg.setAttribute("width", "300");
-        svg.setAttribute("height", "128");
-        svg.setAttribute("viewBox", "0 0 300 128");
-        svgText.setAttribute("width", "300");
-        svgText.setAttribute("height", "128");
         break;
 
       case "spell":
@@ -839,11 +914,6 @@
           rightShape.style.shapeOutside = "ellipse(36px 34px at 128px -10px)";
         }
 
-        svg.setAttribute("width", "262");
-        svg.setAttribute("height", "128");
-        svg.setAttribute("viewBox", "0 0 262 128");
-        svgText.setAttribute("width", "262");
-        svgText.setAttribute("height", "128");
         break;
 
       case "weapon":
@@ -882,11 +952,6 @@
           rightShape.style.shapeOutside = "inset(80px 0 0 70px)";
         }
 
-        svg.setAttribute("width", "254");
-        svg.setAttribute("height", "134");
-        svg.setAttribute("viewBox", "0 0 254 134");
-        svgText.setAttribute("width", "254");
-        svgText.setAttribute("height", "134");
         break;
       
       case "location":
@@ -920,11 +985,6 @@
           rightShape.style.shapeOutside = "inset(84px 0 0 94px)"  
         }
 
-        svg.setAttribute("width", "260");
-        svg.setAttribute("height", "122");
-        svg.setAttribute("viewBox", "0 0 260 122");
-        svgText.setAttribute("width", "260");
-        svgText.setAttribute("height", "122");
         break;
 
       case "hero":
@@ -958,11 +1018,6 @@
           rightShape.style.shapeOutside = "inset(91px 0 0 72px)";
         }
 
-        svg.setAttribute("width", "254");
-        svg.setAttribute("height", "128");
-        svg.setAttribute("viewBox", "0 0 254 128");
-        svgText.setAttribute("width", "254");
-        svgText.setAttribute("height", "128");
         break;
 
       case "power":
@@ -997,20 +1052,20 @@
           rightShape.style.shapeOutside = "inset(80px 0 0 70px)";
         }
 
-        svg.setAttribute("width", "256");
-        svg.setAttribute("height", "128");
-        svg.setAttribute("viewBox", "0 0 256 128");
-        svgText.setAttribute("width", "256");
-        svgText.setAttribute("height", "128");
+        //svg.setAttribute("width", "256");
+        //svg.setAttribute("height", "128");
+        //svg.setAttribute("viewBox", "0 0 256 128");
+        //svgText.setAttribute("width", "256");
+        //svgText.setAttribute("height", "128");
     }
 
+    const hidden = document.getElementById("hidden");
     textBox.appendChild(leftShape);
     textBox.appendChild(rightShape);
     textBox.appendChild(textContent);
-    svgText.appendChild(textBox);
-    svg.appendChild(svgText);
-    hidden.appendChild(svg);
     
+    hidden.appendChild(textBox);
+
     const oldHeight = textContent.offsetHeight;
     const marginHeight = (h - oldHeight) / 2; 
     textContent.style.marginTop = marginHeight + "px";
@@ -1032,6 +1087,41 @@
       textContent.style.transform = `translateY(-${(newHeight - oldHeight) / 2}px)`;
     }
     
+    const textCanvas = await snapdom.toCanvas(textBox, {
+      width: w,
+      height: h,
+      dpr: 1,
+      embedFonts: true,
+      excludeFonts: {
+        families: ["Inter", "AR LisuGB Medium"]
+      }
+    })
+    tctx.value.drawImage(textCanvas, x, y);
+
+    hidden.removeChild(textBox);
+    
+
+    /* // html2canvas solution
+    const box = document.getElementById("box"); 
+    box.style.setProperty("zoom", "1"); 
+    //html2canvas 在父元素被 zoom 或 transform: scale() 的情况下，会出现文字重叠问题。所以暂且复原，画完再缩放回去
+
+    html2canvas(textBox, {
+      backgroundColor: null, 
+      width: w, 
+      height: h, 
+      x: 0, 
+      y: 0, 
+      scale: 1
+    }).then((textCanvas) => {
+      tctx.value.drawImage(textCanvas, x, y);
+    });
+
+    box.style.setProperty("zoom", ".75");
+    hidden.removeChild(textBox);
+    */
+
+    /* // XMLSerializer solution
     const svgStr = new XMLSerializer().serializeToString(svg);
     const svgBlob = new Blob([svgStr], {type: "image/svg+xml;charset=utf-8"});
     const svgURL = URL.createObjectURL(svgBlob);
@@ -1043,6 +1133,7 @@
       hidden.removeChild(svg);
     }
     svgImg.src = svgURL;
+    */
   }
 
   function drawRace(ra, secRa, type){
@@ -1285,39 +1376,47 @@
 </script>
 
 <template>
-  <div class="box">
+  <div id="box">
     <canvas id="illustration" width="540" height="670"></canvas>
     <canvas id="card" width="540" height="670"></canvas>
     <canvas id="text" width="540" height="670"></canvas>
     <div>{{ illustrating }}</div>
     <div id="test"></div>
-    <div id="hidden"></div>
+    <div id="card-background"></div>
   </div>
+  <div id="hidden"></div>
 </template>
 
 <style scoped>
 
-  .box{
+  #box{
     zoom: .75;
     position: absolute;
   }
   #illustration{
     position: absolute;
-    z-index: 1;
+    z-index: 2;
   }
   #card{
     position: absolute;
     pointer-events: none;
-    z-index: 2;
+    z-index: 3;
   }
   #text{
     position: absolute;
     pointer-events: none;
-    z-index: 3;
+    z-index: 4;
+  }
+  #card-background{
+    background-color: var(--background-color);
+    width: 540px;
+    height: 670px;
+    position: absolute;
+    z-index: 1;
   }
   #hidden{
     position: absolute;
-    visibility: hidden;
+    z-index: -1;
     /*
     top: -1000px;
     left: -1000px;
