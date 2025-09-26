@@ -509,7 +509,7 @@
         
         const userAgent = navigator.userAgent;
         if(userAgent.indexOf("Safari") !== -1 && userAgent.indexOf("Chrome") === -1 && userAgent.indexOf("Edge") === -1){
-          transformBox.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(3deg) rotateY(-1deg) skewX(5deg)");
+          transformBox.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(3deg) rotateY(-1deg) skewX(5deg) translateZ(1px)");
         }
 
         svgPath.setAttribute("d", "M-165.0601 14.4342c0 0 27.869 12.5645 96.9358-5.684 61.5273-16.1543 118.6117-20.1929 140.2876-20.1929 21.5413 0 63.0082 3.1411 87.7807 20.1929");
