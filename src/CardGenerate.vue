@@ -497,7 +497,7 @@
     svgPath.setAttribute("visibility", "hidden");
 
     switch(type){
-      case "minion":
+      case "minion":{
         x = 108.57, y = 349.56;
         w = 320, h = 70;
         dy1 = .75, dy2 = .25;
@@ -506,6 +506,11 @@
         svg.setAttribute("height", h);
         svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
         transformBox.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(3deg) rotateY(-1deg)");
+        
+        const userAgent = navigator.userAgent;
+        if(userAgent.indexOf("Safari") !== -1 && userAgent.indexOf("Chrome") === -1 && userAgent.indexOf("Edge") === -1){
+          transformBox.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(3deg) rotateY(-1deg) skewX(5deg)");
+        }
 
         svgPath.setAttribute("d", "M-165.0601 14.4342c0 0 27.869 12.5645 96.9358-5.684 61.5273-16.1543 118.6117-20.1929 140.2876-20.1929 21.5413 0 63.0082 3.1411 87.7807 20.1929");
 
@@ -514,7 +519,7 @@
         svgText.setAttribute("transform", "scale(1, 0.9) skewX(-2)");
         svgText.setAttribute("stroke-width", "5");
         break;
-
+      }
       case "spell":
         x = 83, y = 347.9;
         w = 380, h = 61;
@@ -599,15 +604,15 @@
     }
 
     for(let i = 0; i < nameLength; i++){
-          if(i < 18) continue;
-          else if(i < 22){
-            size *= .935;
-            y -= dy1;
-          } else{
-            size *= .98;
-            y -= dy2;
-          }
-        }
+      if(i < 18) continue;
+      else if(i < 22){
+        size *= .935;
+        y -= dy1;
+      } else{
+        size *= .98;
+        y -= dy2;
+      }
+    }
 
     svgText.setAttribute("text-anchor", "middle");
     svgText.setAttribute("font-family", "AR LisuGB Medium");
