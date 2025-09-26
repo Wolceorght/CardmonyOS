@@ -486,6 +486,9 @@
     const svgText = document.createElementNS(ns, "text");
     const svgTextPath = document.createElementNS(ns, "textPath");
     const svgTextNode = document.createTextNode(str);
+
+    const nameBox = document.createElement("div");
+    const transformBox = document.createElement("div");
     
     let size = 36, x, y, w, h, dy1, dy2;
     let nameLength = strLength(str);
@@ -502,7 +505,7 @@
         svg.setAttribute("width", w);
         svg.setAttribute("height", h);
         svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
-        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(3deg) rotateY(-1deg);");
+        transformBox.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(3deg) rotateY(-1deg)");
 
         svgPath.setAttribute("d", "M-165.0601 14.4342c0 0 27.869 12.5645 96.9358-5.684 61.5273-16.1543 118.6117-20.1929 140.2876-20.1929 21.5413 0 63.0082 3.1411 87.7807 20.1929");
 
@@ -520,7 +523,7 @@
         svg.setAttribute("width", w);
         svg.setAttribute("height", h);
         svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
-        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(1deg);");
+        transformBox.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(1deg);");
 
         svgPath.setAttribute("d", "M -190 29.485 c 0 0 94.9096 -30.9256 189.9525 -30.9256 c 94.9096 0 189.9525 31.992 189.9525 31.992");
         
@@ -537,7 +540,7 @@
         svg.setAttribute("width", w);
         svg.setAttribute("height", h);
         svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
-        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(-.5deg);");
+        transformBox.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(-.5deg);");
         
         svgPath.setAttribute("d", "M-165.5119 6.1462H165.1574");
 
@@ -553,7 +556,7 @@
         svg.setAttribute("width", w);
         svg.setAttribute("height", h);
         svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
-        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(1.5deg);");
+        transformBox.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(1.5deg);");
 
         svgPath.setAttribute("d", "M-171-4.6605c0 0 69.9825 21.8345 170.8906 22.1145 2.666 0 5.4653 0 8.1313 0 29.7259-.2799 56.7858-1.2597 80.2466-4.6188 40.3899-5.7386 65.7169-12.4569 82.1128-17.4956");
 
@@ -570,7 +573,7 @@
         svg.setAttribute("width", w);
         svg.setAttribute("height", h);
         svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
-        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(-1deg);");
+        transformBox.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px) rotateX(-1deg);");
 
         svgPath.setAttribute("d", "M-177.5551 40.7461c0 0 169.6376-107.8397 355.5111-.2666");
 
@@ -588,7 +591,7 @@
         svg.setAttribute("width", w);
         svg.setAttribute("height", h);
         svg.setAttribute("viewBox", `${-w / 2} ${-h / 2}, ${w}, ${h}`);
-        svg.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px);");
+        transformBox.setAttribute("style", "transform-style: preserve-3d; transform: perspective(100px);");
 
         svgPath.setAttribute("d", "M-146 11.9256h291.927");
         
@@ -622,8 +625,8 @@
     svgText.appendChild(svgTextPath);
     svg.appendChild(svgPath);
     svg.appendChild(svgText);
-    const nameBox = document.createElement("div");
-    nameBox.appendChild(svg);
+    transformBox.appendChild(svg);
+    nameBox.appendChild(transformBox);
 
     const hidden = document.getElementById("hidden");
     hidden.appendChild(nameBox);
