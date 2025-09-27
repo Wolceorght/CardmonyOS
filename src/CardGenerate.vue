@@ -1469,16 +1469,16 @@
   #illustration{
     position: absolute;
     z-index: 2;
-    
-    pointer-events: auto;
   }
   #card{
     position: absolute;
     z-index: 3;
+    pointer-events: none;
   }
   #text{
     position: absolute;
     z-index: 4;
+    pointer-events: none;
   }
   #card-background{
     background-color: var(--background-color);
@@ -1486,8 +1486,6 @@
     height: 502.5px;
     position: absolute;
     z-index: 1;
-
-    pointer-events: auto;
   }
   #hidden{
     position: absolute;
@@ -1496,6 +1494,7 @@
     top: -1000px;
     left: -1000px;
     */
+    pointer-events: none;
   }
   #back-button{
     width: calc(100% - 2em);
@@ -1513,8 +1512,6 @@
     position: relative;
     z-index: 2;
     transform: translateY(calc(502.5px + 1em));
-
-    pointer-events: auto;
   }
 
   @media (max-width: 1200px) {

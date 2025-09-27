@@ -1436,13 +1436,11 @@
       position: fixed;
       top: -1000px;
       left: -1000px;
-      pointer-events: auto;
     }
     .card.previewed{
       top: 40%;
       left: 50%;
       transform: translate(-50%, -40%);
-      pointer-events: none;
     }
   }
 
