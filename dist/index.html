@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CardmonyOS Beta - 卡牌制作工具</title>
     <style>@font-face {
     font-family: "Inter";
@@ -129,8 +129,8 @@ body{
         }
       }
     </style>
-    <script type="module" crossorigin src="/assets/index-Cmp4jyB0.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CIgN_tqq.css">
+    <script type="module" crossorigin src="/assets/index-Dk5Axruw.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-vvfH7lKx.css">
   </head>
   <body>
     <div id="background"></div>
@@ -142,5 +142,28 @@ body{
     <div id="container">
       <div id="app"></div>
     </div>
+    <script>
+      window.onload = function () {
+        // 阻止双击放大
+        var lastTouchEnd = 0;
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        });
+        document.addEventListener('touchend', function (event) {
+            var now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    
+        // 阻止双指放大
+        document.addEventListener('gesturestart', function (event) {
+            event.preventDefault();
+        });
+    }
+    </script>
   </body>
 </html>

@@ -1176,6 +1176,8 @@
     border-radius: 0 0 8px 8px;
     display: flex;
     flex-direction: column;
+
+    background-color: var(--background-color);
   }
 
   .option ul::-webkit-scrollbar{
