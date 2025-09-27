@@ -1486,6 +1486,8 @@
     height: 502.5px;
     position: absolute;
     z-index: 1;
+
+    pointer-events: auto;
   }
   #hidden{
     position: absolute;
