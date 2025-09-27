@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>涿莺制卡器 - CardmonyOS</title>
+    <title>CardmonyOS Beta - 卡牌制作工具</title>
     <style>@font-face {
     font-family: "Inter";
     font-weight: 300;
@@ -57,6 +57,7 @@ body{
         position: fixed;
         z-index: -1;
         top: 0; left: 0;
+        display: none;
       }
 
 #container{
@@ -66,8 +67,7 @@ body{
         margin: 0 auto;
         padding: 3.25em 2em 2em 2em;
         background: var(--background-color);
-        border-radius: 20px;
-        box-shadow: 0 0 10px #acafaf;
+        
 
         display: flex;
         box-sizing: border-box;
@@ -75,12 +75,22 @@ body{
         user-select: none;
       }
 
+#header{
+        width: 100%;
+        overflow: hidden;
+        box-sizing: border-box;
+        border-bottom: 1px solid var(--disabled-color);
+        background-image: linear-gradient(135deg, #ffffff, 60%, #dde0e0);
+      }
+
 #title{
         width: 1200px;
         margin: .5em auto;
         font-size: 3em;
         font-weight: 500;
-        text-align: center;
+        letter-spacing: -.025em;
+        text-align: left;
+        text-indent: .67em;
         user-select: none;
 
         background-color: #000000;
@@ -90,20 +100,44 @@ body{
       }
 
 #title span{
-        letter-spacing: -.025em;
+        font-size: .6em;
+        font-weight: 300;
+
+        margin-left: .5em;
       }
 
 #app{
         display: flex;
+        position: relative;
+      }
+
+@media (max-width: 1200px) {
+        body{
+          overflow: auto;
+        }
+
+        #container{
+          width: 100vw;
+          max-width: 750px;
+        }
+        #title{
+          width: 750px;
+          font-size: 2.5em;
+        }
+        #app{
+          width: 100%;
+        }
       }
     </style>
-    <script type="module" crossorigin src="/assets/index-yYz7vxZO.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-vZQBfGye.css">
+    <script type="module" crossorigin src="/assets/index-Duee7oa8.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-C9eb2A53.css">
   </head>
   <body>
     <div id="background"></div>
-    <div id="title">
-      涿莺制卡器　<span>CardmonyOS</span>
+    <div id="header">
+      <div id="title">
+        CardmonyOS<span>Beta</span>
+      </div>
     </div>
     <div id="container">
       <div id="app"></div>

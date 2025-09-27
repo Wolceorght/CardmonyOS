@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, watch } from 'vue';
+  import { onMounted, ref, watch } from 'vue';
   import CardGenerate from '@/CardGenerate.vue';
 
   const result = ref();
@@ -21,7 +21,8 @@
   const attackTitle = ref("攻击力"),
         healthTitle = ref("生命值"),
         raceTitle = ref("随从类型"),
-        imageName = ref("选择图片...")
+        imageName = ref("选择图片..."),
+        miniTitle = ref("迷你系列");
 
   const isOpened = ref({
           class: false,
@@ -355,7 +356,35 @@
       name: "安戈洛龟途"
     }
   ])
-  
+
+  const isMobile = ref(false),
+        isPreviewed = ref(false);
+
+  onMounted(() => {
+    if(window.innerWidth < 1200){
+      isMobile.value = true;
+    }
+  })
+
+  window.addEventListener("resize", () => {
+    if(window.innerWidth < 1200){
+      isMobile.value = true;
+    } else{
+      isMobile.value = false;
+    }
+  })
+
+  function previewCard(){
+    if(isMobile.value){
+      isPreviewed.value = !isPreviewed.value;
+      if(isPreviewed.value){
+        document.body.style.setProperty("overflow", "hidden"); // 禁用滚动
+      } else{
+        document.body.style.setProperty("overflow", "auto");
+      }
+    }
+  }
+
   let sec = false, mul = false;
   watch(
     isEnabled, newVal => {
@@ -378,6 +407,12 @@
       }
       if(!newVal.secondRace){ //第二种族关闭时将其清空
         secondRace.value = "";
+      }
+
+      if(newVal.secondRace){
+        miniTitle.value = "迷";
+      } else{
+        miniTitle.value = "迷你系列";
       }
     },
     { deep: true }
@@ -646,7 +681,7 @@
       </div>
     </div>
 
-    <div class="type">
+    <div class="type" :class="{'folded': isEnabled.secondClass || isEnabled.multiClass}">
       <div class="subtitle-box"><h2>卡牌类型</h2></div>
       <div class="select">
         <div class="option" :class="{'open': isOpened.type}">
@@ -726,7 +761,7 @@
 
     <div class="stat">
       <div class="cost">
-        <div class="subtitle-box"><h2 style="padding-left: .5em;">消耗</h2></div>
+        <div class="subtitle-box"><h2>消耗</h2></div>
         <div class="input-box">
           <div>
             <input type="text"
@@ -774,7 +809,7 @@
 
     <div class="rune" :class="{'disabled': chosen.type === 'power'}">
       <div class="rune-blood">
-        <div class="subtitle-box"><h2 style="padding-left: .5em;">鲜血</h2></div>
+        <div class="subtitle-box"><h2>鲜血</h2></div>
         <div class="input-box">
           <div>
             <input type="text"
@@ -788,7 +823,7 @@
       </div>
       
       <div class="rune-frost">
-        <div class="subtitle-box"><h2 style="padding-left: .5em;">冰霜</h2></div>
+        <div class="subtitle-box"><h2>冰霜</h2></div>
         <div class="input-box">
           <div>
             <input type="text"
@@ -802,7 +837,7 @@
       </div>
 
       <div class="rune-unholy">
-        <div class="subtitle-box"><h2 style="padding-left: .5em;">邪恶</h2></div>
+        <div class="subtitle-box"><h2>邪恶</h2></div>
         <div class="input-box">
           <div>
             <input type="text"
@@ -857,7 +892,7 @@
         <h2>系列水印</h2>
         <div class="checkbox" v-show="miniAccess()">
           <label>
-            迷你系列
+            {{ miniTitle }}
             <input type="checkbox" 
                     name="mini"
                     v-model="isEnabled.mini">
@@ -899,14 +934,20 @@
       </div>
     </div>
 
+    <div class="preview" v-if="isMobile">
+      <div class="command-button" @click="previewCard()">
+        预览
+      </div>
+    </div>
+
     <div class="save">
-      <div class="save-button" @click="saveCard()">
+      <div class="command-button" @click="saveCard()">
         保存<span style="transform: translate(.15em, 0) rotate(15deg);">!</span>
       </div>
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" :class="{previewed: isPreviewed}">
     <CardGenerate :name="name" 
                   :cost="cost" 
                   :attack="attack"
@@ -918,6 +959,8 @@
                   :is-enabled="isEnabled"
                   :chosen="chosen"
                   :img-url="imgUrl"
+                  :is-previewed="isPreviewed"
+                  @preview-card-request="previewCard()"
                   ref="result">
     </CardGenerate>
   </div>
@@ -925,7 +968,7 @@
 </template>
 
 <style scoped>
-  
+
   h2{
     font: 500 1.25em var(--font-family);
     line-height: 1;
@@ -937,7 +980,6 @@
   .data{
     display: grid;
     width: calc(65% - 2em);
-    height: 41em;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(6, 6em);
     gap: 1em;
@@ -1009,17 +1051,16 @@
 
   /*小标题盒子 */
   .subtitle-box{
-    margin-left: .5em;
-    margin-bottom: .25em;
-    padding-right: .75em;
+    margin: 0 .5em .25em .5em;
     display: flex;
     gap: .75em;
     align-items: center;
     justify-content: space-between;
   }
-  .stat .subtitle-box{
-    padding-right: 0;
+  .stat .subtitle-box h2, .rune .subtitle-box h2{
+    text-align: center;
   }
+  
   .subtitle-box .checkbox{
     transform: translateY(-.25em);
     padding: .25em;
@@ -1029,7 +1070,7 @@
     background-color: var(--background-color);
     transition: all .2s ease;
   }
-  .subtitle-box .checkbox:hover{
+  .subtitle-box .checkbox:active{
     outline-color: var(--hover-color);
     background-color: var(--hover-color);
     transition: all .2s ease;
@@ -1082,11 +1123,9 @@
     line-height: 1;
     color: var(--disabled-color);
   }
-  .subtitle-box button:hover{
+  .subtitle-box button:active{
     outline-color: var(--hover-color);
     background-color: var(--hover-color);
-  }
-  .subtitle-box button:active{
     color: var(--shape-color);
   }
 
@@ -1118,7 +1157,7 @@
 
     outline-color: var(--hover-color);
   }
-  .option .toggle-box:hover{
+  .option .toggle-box:active{
     background-color: var(--hover-color);
     outline-color: var(--hover-color);
   }
@@ -1185,8 +1224,9 @@
     width: 100%;
     background-color: var(--background-color);
     transition: background-color .2s ease;
+
   }
-  .option li:hover{
+  .option li:active{
     background-color: var(--hover-color);
   }
   .option label{
@@ -1222,7 +1262,7 @@
   .input-box input::placeholder{
     color: var(--disabled-color);
   }
-  .input-box input:hover, .input-box input:focus{
+  .input-box input:active, .input-box input:focus{
     background-color: var(--hover-color);
   }
 
@@ -1262,7 +1302,7 @@
   
   
   .text-box{
-    height: 10em;
+    height: 10.5em;
   }
   .text-box textarea{
     width: 100%;
@@ -1279,7 +1319,7 @@
     background-color: var(--background-color);
     transition: background-color .2s ease;
   }
-  .text-box textarea:hover, .text-box textarea:focus{
+  .text-box textarea:active, .text-box textarea:focus{
     background-color: var(--hover-color);
   }
 
@@ -1303,14 +1343,14 @@
     transition: background-color .2s ease;
     cursor: pointer;
   }
-  .image-box label:hover{
+  .image-box label:active{
     background-color: var(--hover-color);
   }
   .image-box input{
     display: none;
   }
   
-  .save-button{
+  .command-button{
     display: flex;
     margin-top: 1em;
     border-radius: 8px;
@@ -1324,7 +1364,7 @@
     cursor: pointer;
   }
 
-  .save-button:hover{
+  .command-button:active{
     background-color: var(--hover-color);
     color: var(--shape-color);
   }
@@ -1339,7 +1379,106 @@
   }
 
   .card{
+    /*
     position: relative;
     transform: translate(1.75em, 2.25em);
+    */
+    width: 405px;
+    height: 502.5px;
+    align-self: center;
+  }
+
+  @media (max-width: 1200px) {
+
+    .data{
+      width: 100%;
+      grid-template-columns: repeat(9, 1fr);
+      grid-template-rows: repeat(10, 6em);
+      grid-template-areas: 'c1 c1 c1 c1 c1 ra ra ra ra'
+                           'c2 c2 c2 c2 c2 ty ty ty ty'
+                           'na na na na na na na na na'
+                           'st st st st st st st st st'
+                           'ru ru ru ru ru ru ru ru ru'
+                           'te te te te te ba ba ba ba'
+                           'te te te te te r1 r1 r1 r1'
+                           'em em em em em r2 r2 r2 r2'
+                           'im im im im im im pr pr pr'
+                           'sa sa sa sa sa sa sa sa sa';
+    }
+    .preview{
+      grid-area: pr;
+    }
+    .type{
+      grid-column: c2-start / ty-end;
+      grid-row: ty-start / ty-end;
+    }
+    .type.folded{
+      grid-area: ty;
+    }
+
+    h2{
+      white-space: nowrap;
+    }
+    .toggle{
+      width: calc(100% - 1em);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .option label{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .card{
+      position: fixed;
+      top: -1000px;
+      left: -1000px;
+      pointer-events: auto;
+    }
+    .card.previewed{
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -40%);
+      pointer-events: none;
+    }
+  }
+
+  @media (hover: hover) {
+    .subtitle-box .checkbox:hover{
+      outline-color: var(--hover-color);
+      background-color: var(--hover-color);
+      transition: all .2s ease;
+    }
+
+    .subtitle-box button:hover{
+      outline-color: var(--hover-color);
+      background-color: var(--hover-color);
+    }
+
+    .option .toggle-box:hover{
+      background-color: var(--hover-color);
+      outline-color: var(--hover-color);
+    }
+
+    .option li:hover{
+      background-color: var(--hover-color);
+    }
+
+    .input-box input:hover{
+      background-color: var(--hover-color);
+    }
+    .text-box textarea:hover{
+      background-color: var(--hover-color);
+    }
+
+    .image-box label:hover{
+      background-color: var(--hover-color);
+    }
+
+    .command-button:hover{
+      background-color: var(--hover-color);
+      color: var(--shape-color);
+    }
   }
 </style>

@@ -15,8 +15,12 @@
     isEnabled: Object,
     chosen: Object,
 
-    imgUrl: String
+    imgUrl: String,
+    
+    isPreviewed: Boolean
   })
+  const emit = defineEmits(["previewCardRequest"]);
+  emit("previewCardRequest");
 
   const loaded = ref(false);
 
@@ -71,14 +75,15 @@
   watch(
     [props, loaded], () => {
     if(loaded.value && fctx.value !== null && tctx.value !== null){
-      drawFrame(props.attack, 
+      setTimeout(() => {
+        drawFrame(props.attack, 
                 props.health, 
                 props.rune, 
                 props.race,
                 props.secondRace, 
                 props.isEnabled, 
                 props.chosen);
-      drawTexts(props.name, 
+        drawTexts(props.name, 
                 props.cost, 
                 props.attack, 
                 props.health,
@@ -86,6 +91,7 @@
                 props.race,
                 props.secondRace,
                 props.chosen);
+      }, 1)
     }
   },
   {
@@ -1238,7 +1244,11 @@
   function adjustIllustration(url, cho){
 
     let isDragging = false,
+        isScaling = false,
+        startPosition = {x: 0, y: 0},
         lastPosition = {x: 0, y: 0},
+        startDistance,
+        endDistance,
         offset = {x: 0, y: 0},
         scale = 1;
 
@@ -1258,6 +1268,7 @@
 
     i.value.style.cursor = "move";
     
+    // 鼠标部分
     i.value.addEventListener("mousedown", (e) => {
       isDragging = true;
       lastPosition = {x: e.clientX, y: e.clientY};
@@ -1297,6 +1308,54 @@
       scale = newScale;
 
       drawIllustration(cho);
+    })
+
+    // 触控部分
+    i.value.addEventListener("touchstart", (e) => {
+      lastPosition = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+
+      if(e.touches.length === 2){
+        isScaling = true;
+        startPosition.x = Math.abs(e.touches[0].pageX - e.touches[1].pageX);
+        startPosition.y = Math.abs(e.touches[0].pageY - e.touches[1].pageY);
+        startDistance = Math.sqrt(startPosition.x * startPosition.x + startPosition.y * startPosition.y);
+      }
+    })
+
+    i.value.addEventListener("touchmove", (e) => {
+      if(isScaling){
+        const endPosition = {
+          x: Math.abs(e.touches[0].pageX - e.touches[1].pageX),
+          y: Math.abs(e.touches[0].pageY - e.touches[1].pageY)
+        }
+        endDistance = Math.sqrt(endPosition.x * endPosition.x + endPosition.y * endPosition.y);
+        
+        const mx = e.touches[0].clientX - i.value.getBoundingClientRect().left,
+              my = e.touches[0].clientY - i.value.getBoundingClientRect().top;
+        
+        const newScale = endDistance / startDistance * scale;
+        if(newScale < 0.1 || newScale > 5) return;
+
+        const factor = newScale / scale;
+        offset.x = mx - factor * (mx - offset.x);
+        offset.y = my - factor * (my - offset.y);
+        scale = newScale;
+
+        drawIllustration(cho);
+
+      } else{
+        const dx = e.touches[0].clientX - lastPosition.x,
+              dy = e.touches[0].clientY - lastPosition.y;
+        offset.x += dx;
+        offset.y += dy;
+        lastPosition = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+
+        drawIllustration(cho);
+      }
+    })
+
+    i.value.addEventListener("touchend", () => {
+      isScaling = false;
     })
 
     function drawIllustration(cho){
@@ -1391,8 +1450,13 @@
     <canvas id="text" width="540" height="670"></canvas>
     <div>{{ illustrating }}</div>
     <div id="test"></div>
-    <div id="card-background"></div>
   </div>
+  <div id="back-button"
+       v-show="props.isPreviewed"
+       @click="$emit('previewCardRequest')">
+    返回
+  </div>
+  <div id="card-background"></div>
   <div id="hidden"></div>
 </template>
 
@@ -1405,21 +1469,21 @@
   #illustration{
     position: absolute;
     z-index: 2;
+    
+    pointer-events: auto;
   }
   #card{
     position: absolute;
-    pointer-events: none;
     z-index: 3;
   }
   #text{
     position: absolute;
-    pointer-events: none;
     z-index: 4;
   }
   #card-background{
     background-color: var(--background-color);
-    width: 540px;
-    height: 670px;
+    width: 405px;
+    height: 502.5px;
     position: absolute;
     z-index: 1;
   }
@@ -1430,6 +1494,40 @@
     top: -1000px;
     left: -1000px;
     */
+  }
+  #back-button{
+    width: calc(100% - 2em);
+    margin: 0 1em;
+    display: flex;
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    font: 500 2em var(--font-family);
+    line-height: 1.75em;
+    background-color: var(--background-color);
+    color: var(--disabled-color);
+    transition: all .2s ease;
+
+    position: relative;
+    z-index: 2;
+    transform: translateY(calc(502.5px + 1em));
+
+    pointer-events: auto;
+  }
+
+  @media (max-width: 1200px) {
+    #card-background{
+      width: 1200px;
+      height: 2000px;
+      transform: translate(-25%, -25%);
+    }
+  }
+
+  @media (hover: none) {
+    #back-button:active{
+      background-color: var(--hover-color);
+      color: var(--shape-color);
+    }
   }
 
 </style>
