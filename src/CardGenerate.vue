@@ -1243,12 +1243,15 @@
 
   function adjustIllustration(url, cho){
 
-    let isDragging = false,
-        isScaling = false,
-        startPosition = {x: 0, y: 0},
+    let isDragging = false, // 鼠标
         lastPosition = {x: 0, y: 0},
+
+        isScaling = false, // 触控
+        startPosition = {x: 0, y: 0},
+        midPoint = {x: 0, y: 0},
         startDistance,
         endDistance,
+
         offset = {x: 0, y: 0},
         scale = 1;
 
@@ -1312,38 +1315,53 @@
 
     // 触控部分
     i.value.addEventListener("touchstart", (e) => {
-      lastPosition = {x: e.touches[0].clientX, y: e.touches[0].clientY};
-
       if(e.touches.length === 2){
         isScaling = true;
-        startPosition.x = Math.abs(e.touches[0].pageX - e.touches[1].pageX);
-        startPosition.y = Math.abs(e.touches[0].pageY - e.touches[1].pageY);
+        isDragging = false;
+        startPosition.x = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+        startPosition.y = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
         startDistance = Math.sqrt(startPosition.x * startPosition.x + startPosition.y * startPosition.y);
+        
+        const tx = [
+          e.touches[0].clientX - i.value.getBoundingClientRect().left,
+          e.touches[1].clientX - i.value.getBoundingClientRect().left,
+        ],
+        ty = [
+          e.touches[0].clientY - i.value.getBoundingClientRect().top,
+          e.touches[1].clientY - i.value.getBoundingClientRect().top,
+        ]
+        
+        midPoint.x = (tx[0] + tx[1]) / 2;
+        midPoint.y = (ty[0] + ty[1]) / 2;
+      } else if(e.touches.length === 1 && !isScaling){
+        isDragging = true;
+        lastPosition = {x: e.touches[0].clientX, y: e.touches[0].clientY};
       }
     })
 
     i.value.addEventListener("touchmove", (e) => {
-      if(isScaling){
+      if(e.touches.length === 2 && isScaling){
         const endPosition = {
-          x: Math.abs(e.touches[0].pageX - e.touches[1].pageX),
-          y: Math.abs(e.touches[0].pageY - e.touches[1].pageY)
+          x: Math.abs(e.touches[0].clientX - e.touches[1].clientX),
+          y: Math.abs(e.touches[0].clientY - e.touches[1].clientY)
         }
         endDistance = Math.sqrt(endPosition.x * endPosition.x + endPosition.y * endPosition.y);
-        
-        const mx = e.touches[0].clientX - i.value.getBoundingClientRect().left,
-              my = e.touches[0].clientY - i.value.getBoundingClientRect().top;
         
         const newScale = endDistance / startDistance * scale;
         if(newScale < 0.1 || newScale > 5) return;
 
         const factor = newScale / scale;
-        offset.x = mx - factor * (mx - offset.x);
-        offset.y = my - factor * (my - offset.y);
+        offset.x = midPoint.x - factor * (midPoint.x - offset.x);
+        offset.y = midPoint.y - factor * (midPoint.y - offset.y);
         scale = newScale;
+
+        startPosition.x = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+        startPosition.y = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
+        startDistance = Math.sqrt(startPosition.x * startPosition.x + startPosition.y * startPosition.y);
 
         drawIllustration(cho);
 
-      } else{
+      } else if(e.touches.length === 1 && isDragging){
         const dx = e.touches[0].clientX - lastPosition.x,
               dy = e.touches[0].clientY - lastPosition.y;
         offset.x += dx;
@@ -1354,8 +1372,15 @@
       }
     })
 
-    i.value.addEventListener("touchend", () => {
+    i.value.addEventListener("touchend", (e) => {
       isScaling = false;
+
+      if(e.touches.length === 1){
+        isDragging = true;
+        lastPosition = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+      } else if(e.touches.length === 0){
+        isDragging = false;
+      }
     })
 
     function drawIllustration(cho){
@@ -1395,6 +1420,7 @@
 
       ictx.value.drawImage(c1, 0, 0);
       ictx.value.globalCompositeOperation = "source-in";
+      ictx.value.imageSmoothingQuality = "high";
 
       ictx.value.save();
       ictx.value.translate(offset.x, offset.y);

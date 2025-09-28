@@ -1395,14 +1395,15 @@
     .data{
       width: 100%;
       grid-template-columns: repeat(9, 1fr);
-      grid-template-rows: repeat(10, 6em);
+      grid-template-rows: repeat(11, 6em);
       grid-template-areas: 'c1 c1 c1 c1 c1 ra ra ra ra'
                            'c2 c2 c2 c2 c2 ty ty ty ty'
                            'na na na na na na na na na'
                            'st st st st st st st st st'
                            'ru ru ru ru ru ru ru ru ru'
-                           'te te te te te ba ba ba ba'
-                           'te te te te te r1 r1 r1 r1'
+                           'te te te te te te te te te'
+                           'te te te te te te te te te'
+                           'ba ba ba ba ba r1 r1 r1 r1'
                            'em em em em em r2 r2 r2 r2'
                            'im im im im im im pr pr pr'
                            'sa sa sa sa sa sa sa sa sa';

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
@@ -7,6 +7,10 @@
     <title>CardmonyOS Beta - 卡牌制作工具</title>
     <style>
       @import url("@/assets/font/font.css");
+
+      *{
+        touch-action: pan-y;
+      }
 
       :root{
         --hover-color: #f0f0f0;
@@ -115,28 +119,6 @@
       <div id="app"></div>
     </div>
     <script type="module" src="/src/main.js"></script>
-    <script>
-      window.onload = function () {
-        // 阻止双击放大
-        var lastTouchEnd = 0;
-        document.addEventListener('touchstart', function (event) {
-            if (event.touches.length > 1) {
-                event.preventDefault();
-            }
-        });
-        document.addEventListener('touchend', function (event) {
-            var now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
     
-        // 阻止双指放大
-        document.addEventListener('gesturestart', function (event) {
-            event.preventDefault();
-        });
-    }
-    </script>
   </body>
 </html>
