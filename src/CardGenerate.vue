@@ -72,32 +72,39 @@
   })
   })
 
+  let state = true,
+      watchCount = 0;
   watch(
-    [props, loaded], () => {
-    if(loaded.value && fctx.value !== null && tctx.value !== null){
-      setTimeout(() => {
-        drawFrame(props.attack, 
-                props.health, 
-                props.rune, 
-                props.race,
-                props.secondRace, 
-                props.isEnabled, 
-                props.chosen);
-        drawTexts(props.name, 
-                props.cost, 
-                props.attack, 
-                props.health,
-                props.text,
-                props.race,
-                props.secondRace,
-                props.chosen);
-      }, 1)
+    [props, loaded], (newVal) => {
+      if(newVal[0].isPreviewed === state || watchCount === 0){
+        if(loaded.value && fctx.value !== null && tctx.value !== null){
+          setTimeout(() => {
+            drawFrame(props.attack, 
+                    props.health, 
+                    props.rune, 
+                    props.race,
+                    props.secondRace, 
+                    props.isEnabled, 
+                    props.chosen);
+            drawTexts(props.name, 
+                    props.cost, 
+                    props.attack, 
+                    props.health,
+                    props.text,
+                    props.race,
+                    props.secondRace,
+                    props.chosen);
+          }, 1)
+        }
+      } else if(watchCount !== 0){
+        state = !state;
+      }
+      watchCount ++;
+    },
+    {
+      deep: true
     }
-  },
-  {
-    deep: true
-  }
-);
+  );
 
   const illustrating = computed(() => {
     if(loaded.value && props.imgUrl !== ""){
@@ -444,7 +451,11 @@
     tctx.value.textBaseline = "middle";
     tctx.value.fillStyle = "#111";
     tctx.value.shadowColor = "#111";
-    tctx.value.shadowBlur = props.chosen.type === "power" ? 2.4 : 3;
+    if(navigator.userAgent.indexOf("Chrome") !== -1){
+      tctx.value.shadowBlur = props.chosen.type === "power" ? 2.56 : 3.2;
+    } else{
+      tctx.value.shadowBlur = props.chosen.type === "power" ? 2.4 : 3;
+    }
     for(let i = 0; i < 64; i++){
       tctx.value.fillText(str, x, y);
     }
@@ -1536,15 +1547,28 @@
     transition: all .2s ease;
 
     position: relative;
+    top: 6em;
     z-index: 2;
     transform: translateY(calc(502.5px + 1em));
   }
 
   @media (max-width: 1200px) {
+    #box{
+      width: 540px;
+      height: 670px;
+      top: 0;
+      bottom: 20%;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+
     #card-background{
-      width: 1200px;
-      height: 2000px;
-      transform: translate(-25%, -25%);
+      position: absolute;
+      width: 100vw;
+      height: 100dvh;
+      bottom: 0;
+      left: 0;
     }
   }
 

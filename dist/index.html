@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CardmonyOS Beta - 卡牌制作工具</title>
+    <title>CardmonyOS - 卡牌制作工具</title>
     <style>@font-face {
     font-family: "Inter";
     font-weight: 300;
@@ -54,6 +54,10 @@ body{
         position: relative;
       }
 
+b{
+        font-weight: 500 ;
+      }
+
 #background{
         width: 100%;
         height: 100dvh;
@@ -83,18 +87,20 @@ body{
         width: 100%;
         overflow: hidden;
         box-sizing: border-box;
-        border-bottom: 1px solid var(--disabled-color);
+        border-bottom: 1px solid var(--border-color);
         background-image: linear-gradient(135deg, #ffffff, 60%, #dde0e0);
       }
 
 #title{
         width: 1200px;
         margin: .5em auto;
+        padding-left: .67em;
+        box-sizing: border-box;
         font-size: 3em;
         font-weight: 500;
+        line-height: 1.25;
         letter-spacing: -.025em;
         text-align: left;
-        text-indent: .67em;
         user-select: none;
 
         background-color: #000000;
@@ -106,7 +112,7 @@ body{
 #title span{
         font-size: .6em;
         font-weight: 300;
-
+        letter-spacing: -.025em;
         margin-left: .5em;
       }
 
@@ -118,6 +124,7 @@ body{
 @media (max-width: 1200px) {
         body{
           overflow: auto;
+          font-size: .9em;
         }
 
         #container{
@@ -125,27 +132,28 @@ body{
           max-width: 750px;
         }
         #title{
-          width: 750px;
-          font-size: 2.5em;
+          max-width: 750px;
         }
         #app{
           width: 100%;
         }
+
       }
+
     </style>
-    <script type="module" crossorigin src="/assets/index-BhEwVAgw.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DSEcpC9v.css">
+    <script type="module" crossorigin src="/assets/index-Bp9xaLlj.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-YpWo5DOj.css">
   </head>
   <body>
     <div id="background"></div>
     <div id="header">
       <div id="title">
-        CardmonyOS<span>Beta</span>
+        CardmonyOS
       </div>
     </div>
     <div id="container">
       <div id="app"></div>
     </div>
-    
+    <div id="footer"></div>
   </body>
 </html>

@@ -947,7 +947,27 @@
     </div>
   </div>
 
+  <div class="bar" v-if="!isMobile"></div>
+
   <div class="card" :class="{previewed: isPreviewed}">
+    <svg class="frame" width="405" height="502.5" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <line x1="0" y1="0" x2="32" y2="0" stroke="#ccc" stroke-width="16"></line>
+        <line x1="0" y1="0" x2="0" y2="32" stroke="#ccc" stroke-width="16"></line>
+      </g>
+      <g>
+        <line x1="405" y1="0" x2="373" y2="0" stroke="#ccc" stroke-width="16"></line>
+        <line x1="405" y1="0" x2="405" y2="32" stroke="#ccc" stroke-width="16"></line>
+      </g>
+      <g>
+        <line x1="0" y1="502" x2="32" y2="502" stroke="#ccc" stroke-width="16"></line>
+        <line x1="0" y1="502" x2="0" y2="470" stroke="#ccc" stroke-width="16"></line>
+      </g>
+      <g>
+        <line x1="405" y1="502" x2="373" y2="502" stroke="#ccc" stroke-width="16"></line>
+        <line x1="405" y1="502" x2="405" y2="470" stroke="#ccc" stroke-width="16"></line>
+      </g>
+    </svg>
     <CardGenerate :name="name" 
                   :cost="cost" 
                   :attack="attack"
@@ -1255,6 +1275,7 @@
     outline: none;
     padding: 0 .25em;
     font: var(--value-font);
+    color: var(--shape-color);
     line-height: 1.75;
     width: 100%;
     box-sizing: border-box;
@@ -1380,6 +1401,11 @@
     color: var(--disabled-color) !important;
   }
 
+  
+  .bar{
+    margin: 0 1em;
+  }
+
   .card{
     /*
     position: relative;
@@ -1388,6 +1414,14 @@
     width: 405px;
     height: 502.5px;
     align-self: center;
+    position: relative;
+  }
+  .frame{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    pointer-events: none;
   }
 
   @media (max-width: 1200px) {
@@ -1435,13 +1469,24 @@
     }
     .card{
       position: fixed;
-      top: -1000px;
-      left: -1000px;
+      width: 100dvw;
+      height: 100dvh;
+      max-height: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 9999;
+      transition: max-height .5s ease;
+      overflow: hidden;
     }
     .card.previewed{
-      top: 40%;
-      left: 50%;
-      transform: translate(-50%, -40%);
+      max-height: 100dvh;
+    }
+    .frame{
+      top: 0;
+      bottom: 20%;
+      left: 0;
+      right: 0;
+      margin: auto;
     }
   }
 
