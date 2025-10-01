@@ -950,22 +950,22 @@
   <div class="bar" v-if="!isMobile"></div>
 
   <div class="card" :class="{previewed: isPreviewed}">
-    <svg class="frame" width="405" height="502.5" xmlns="http://www.w3.org/2000/svg">
+    <svg class="frame" v-if="!isMobile" width="405" height="502.5" xmlns="http://www.w3.org/2000/svg">
       <g>
-        <line x1="0" y1="0" x2="32" y2="0" stroke="#ccc" stroke-width="16"></line>
-        <line x1="0" y1="0" x2="0" y2="32" stroke="#ccc" stroke-width="16"></line>
+        <line x1="0" y1="0" x2="32" y2="0" stroke="#1a69fc" stroke-width="16"></line>
+        <line x1="0" y1="0" x2="0" y2="32" stroke="#1a69fc" stroke-width="16"></line>
       </g>
       <g>
-        <line x1="405" y1="0" x2="373" y2="0" stroke="#ccc" stroke-width="16"></line>
-        <line x1="405" y1="0" x2="405" y2="32" stroke="#ccc" stroke-width="16"></line>
+        <line x1="405" y1="0" x2="373" y2="0" stroke="#1a69fc" stroke-width="16"></line>
+        <line x1="405" y1="0" x2="405" y2="32" stroke="#1a69fc" stroke-width="16"></line>
       </g>
       <g>
-        <line x1="0" y1="502" x2="32" y2="502" stroke="#ccc" stroke-width="16"></line>
-        <line x1="0" y1="502" x2="0" y2="470" stroke="#ccc" stroke-width="16"></line>
+        <line x1="0" y1="502" x2="32" y2="502" stroke="#1a69fc" stroke-width="16"></line>
+        <line x1="0" y1="502" x2="0" y2="470" stroke="#1a69fc" stroke-width="16"></line>
       </g>
       <g>
-        <line x1="405" y1="502" x2="373" y2="502" stroke="#ccc" stroke-width="16"></line>
-        <line x1="405" y1="502" x2="405" y2="470" stroke="#ccc" stroke-width="16"></line>
+        <line x1="405" y1="502" x2="373" y2="502" stroke="#1a69fc" stroke-width="16"></line>
+        <line x1="405" y1="502" x2="405" y2="470" stroke="#1a69fc" stroke-width="16"></line>
       </g>
     </svg>
     <CardGenerate :name="name" 
@@ -1480,13 +1480,6 @@
     }
     .card.previewed{
       max-height: 100dvh;
-    }
-    .frame{
-      top: 0;
-      bottom: 20%;
-      left: 0;
-      right: 0;
-      margin: auto;
     }
   }
 

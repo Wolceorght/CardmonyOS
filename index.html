@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="刻疏">
     <title>CardmonyOS - 卡牌制作工具</title>
     <style>
       @import url("@/assets/font/font.css");
@@ -16,6 +17,7 @@
         --hover-color: #f0f0f0;
         --shape-color: #313737;
         --border-color: #ccc;
+        --harmony-blue: #1a69fc;
         --background-color: #fff;
         --disabled-color: #7e8689;
         --value-font: 300 2em var(--font-family);
@@ -84,16 +86,47 @@
         color: transparent;
       }
       #title span{
-        font-size: .6em;
+        font-size: .65em;
         font-weight: 300;
-        letter-spacing: -.025em;
         margin-left: .5em;
       }
-
       #app{
         display: flex;
         position: relative;
       }
+
+      /*********************/
+      .beta{
+        font-weight: 300;
+      }
+      .unlimited-card-works, .cardmony-os{
+        position: relative;
+        width: fit-content;
+      }
+      .unlimited-card-works::before{
+        position: absolute;
+        top: 0;
+        left: calc(50% + 1em);
+        transform: translate(-50%, -70%);
+        content: "無限牌製";
+        font-size: .5em;
+        font-weight: 300;
+        letter-spacing: 2em;
+        white-space: nowrap;
+      }
+      .cardmony-os::after{
+        content: "";  
+        position: absolute;
+        bottom: .06em;
+        left: 4.9em;
+        width: .45em;
+        height: .1em;
+        background-color: var(--harmony-blue);
+      }
+      #title.cardmony-os::after{
+        left: 5.57em !important;
+      }
+      /*********************/
 
       @media (max-width: 1200px) {
         body{
@@ -108,6 +141,10 @@
         #title{
           max-width: 750px;
         }
+        #title span{
+          display: none;
+        }
+
         #app{
           width: 100%;
         }
@@ -119,8 +156,8 @@
   <body>
     <div id="background"></div>
     <div id="header">
-      <div id="title">
-        CardmonyOS
+      <div id="title" class="cardmony-os">
+        CardmonyOS<span>卡牌制作工具</span>
       </div>
     </div>
     <div id="container">

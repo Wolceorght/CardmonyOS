@@ -16,7 +16,7 @@ import { onBeforeMount, ref } from 'vue';
         "优化了移动端的表单布局"
       ]
     },{
-      generation: "Unlimited Card Works",
+      generation: "CardmonyOS",
       name: "1.0",
       log: [
         "CardmonyOS：没有限制、无须等待、完全免费的《炉石传说》卡牌制作工具",
@@ -80,20 +80,20 @@ import { onBeforeMount, ref } from 'vue';
     <div id="ver-box">
       <div id="ver-frame">
         <svg width="32" height="32" style="position: absolute; top: -16px; left: -16px" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="0" x2="32" y2="0" stroke="#ccc" stroke-width="16"></line>
-          <line x1="0" y1="0" x2="0" y2="32" stroke="#ccc" stroke-width="16"></line>
+          <line x1="0" y1="0" x2="32" y2="0" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="0" y1="0" x2="0" y2="32" stroke="#1a69fc" stroke-width="16"></line>
         </svg>
         <svg width="32" height="32" style="position: absolute; top: -16px; right: -16px" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="0" x2="32" y2="0" stroke="#ccc" stroke-width="16"></line>
-          <line x1="32" y1="0" x2="32" y2="32" stroke="#ccc" stroke-width="16"></line>
+          <line x1="0" y1="0" x2="32" y2="0" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="32" y1="0" x2="32" y2="32" stroke="#1a69fc" stroke-width="16"></line>
         </svg>
         <svg width="32" height="32" style="position: absolute; bottom: -16px; left: -16px" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="0" x2="0" y2="32" stroke="#ccc" stroke-width="16"></line>
-          <line x1="0" y1="32" x2="32" y2="32" stroke="#ccc" stroke-width="16"></line>
+          <line x1="0" y1="0" x2="0" y2="32" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="0" y1="32" x2="32" y2="32" stroke="#1a69fc" stroke-width="16"></line>
         </svg>
         <svg width="32" height="32" style="position: absolute; bottom: -16px; right: -16px" xmlns="http://www.w3.org/2000/svg">
-          <line x1="32" y1="0" x2="32" y2="32" stroke="#ccc" stroke-width="16"></line>
-          <line x1="0" y1="32" x2="32" y2="32" stroke="#ccc" stroke-width="16"></line>
+          <line x1="32" y1="0" x2="32" y2="32" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="0" y1="32" x2="32" y2="32" stroke="#1a69fc" stroke-width="16"></line>
         </svg>
       </div>
       <div id="ver-title">
@@ -195,6 +195,7 @@ import { onBeforeMount, ref } from 'vue';
     height: 70%;
     margin: 6.75em auto 4em auto;
     padding: 2em;
+    border: 1px 0 solid var(--border-color);
     box-sizing: border-box;
     user-select: none;
     overflow: auto;
@@ -279,25 +280,16 @@ import { onBeforeMount, ref } from 'vue';
   .ver-log-object::marker{
     color: var(--disabled-color);
   }
-  .unlimited-card-works{
-    position: relative;
-    width: fit-content;
-  }
-  .unlimited-card-works::before{
-    position: absolute;
-    top: 0;
-    left: calc(50% + 1em);
-    transform: translate(-50%, -70%);
-    content: "無限牌製";
-    font-size: .5em;
-    font-weight: 300;
-    letter-spacing: 2em;
-    white-space: nowrap;
-  }
 
-  .beta{
-    font-weight: 300;
+  /****************************/
+  #ver-button .cardmony-os::after{
+    background-color: var(--disabled-color);
+    transition: background-color .2s ease;
   }
+  #ver-button:active .cardmony-os::after{
+    background-color: var(--harmony-blue);
+  }
+  /****************************/
 
   .split-line{
     display: block;
@@ -320,6 +312,7 @@ import { onBeforeMount, ref } from 'vue';
     color: var(--disabled-color);
     transition: all .2s ease;
     cursor: pointer;
+    user-select: none;
   }  
   #back-button:active{
     background-color: var(--hover-color);
@@ -370,6 +363,10 @@ import { onBeforeMount, ref } from 'vue';
     #back-button:hover{
       background-color: var(--hover-color);
       color: var(--shape-color);
+    }
+
+    #ver-button:hover .cardmony-os::after{
+      background-color: var(--harmony-blue);
     }
   }
 

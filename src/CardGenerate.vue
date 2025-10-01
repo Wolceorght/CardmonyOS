@@ -1547,9 +1547,8 @@
     transition: all .2s ease;
 
     position: relative;
-    top: 6em;
+    top: 75dvh;
     z-index: 2;
-    transform: translateY(calc(502.5px + 1em));
   }
 
   @media (max-width: 1200px) {
