@@ -1,0 +1,182 @@
+@import url("@/assets/font/font.css");
+
+*{
+  touch-action: pan-y;
+}
+
+:root{
+  --hover-color: #f0f0f0;
+  --shape-color: #313737;
+  --border-color: #ccc;
+  --harmony-blue: #1a69fc;
+  --background-color: #fff;
+  --disabled-color: #7e8689;
+  --value-font: 300 2em var(--font-family);
+  --font-family: "Inter", "SF Pro", "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft Yahei", sans-serif
+}
+
+body{
+  font-family: var(--font-family);
+  color: var(--shape-color);
+  margin: 0;
+  padding-top: 1px;
+  box-sizing: border-box;
+  position: relative;
+  background-color: var(--background-color);
+}
+
+b{
+  font-weight: 500 ;
+}
+
+#background{
+  width: 100%;
+  height: 100dvh;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23cccccc' fill-opacity='1' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E"), linear-gradient(#D3D3D3, #6d7476);
+  position: fixed;
+  z-index: -1;
+  top: 0; left: 0;
+  display: none;
+}
+
+#container{
+  font-size: 1em;
+
+  width: 1200px;
+  margin: 0 auto;
+  padding: 3.25em 2em 2em 2em;
+  background: var(--background-color);
+  
+
+  display: flex;
+  box-sizing: border-box;
+
+  user-select: none;
+}
+#header{
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--border-color);
+  background-image: linear-gradient(135deg, #ffffff, 60%, #dde0e0);
+}
+#title{
+  width: 1200px;
+  margin: .5em auto;
+  padding-left: .67em;
+  box-sizing: border-box;
+  font-size: 3em;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -.025em;
+  text-align: left;
+  user-select: none;
+
+  background-color: #000000;
+  background-image: linear-gradient(180deg, #000000 0%, #313737 80%);
+  background-clip: text;
+  color: transparent;
+}
+#title span{
+  font-size: .65em;
+  font-weight: 300;
+  margin-left: .5em;
+}
+#app{
+  display: flex;
+  position: relative;
+}
+
+/*********************/
+.beta{
+  font-weight: 300;
+}
+.unlimited-card-works, .cardmony-os{
+  position: relative;
+  width: fit-content;
+}
+.unlimited-card-works::before{
+  position: absolute;
+  top: 0;
+  left: calc(50% + 1em);
+  transform: translate(-50%, -70%);
+  content: "無限牌製";
+  font-size: .5em;
+  font-weight: 300;
+  letter-spacing: 2em;
+  white-space: nowrap;
+}
+.cardmony-os::after{
+  content: "";  
+  position: absolute;
+  bottom: .06em;
+  left: 4.9em;
+  width: .45em;
+  height: .1em;
+  background-color: var(--harmony-blue);
+}
+#title.cardmony-os::after{
+  left: 5.57em !important;
+}
+/*********************/
+
+@media (max-width: 1200px) {
+  body{
+    overflow: auto;
+    font-size: .9em;
+  }
+
+  #container{
+    width: 100vw;
+    max-width: 750px;
+  }
+  #title{
+    max-width: 750px;
+  }
+  #title span{
+    display: none;
+  }
+
+  #app{
+    width: 100%;
+  }
+
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --hover-color: #292e2e;
+    --shape-color: #f0f0f0;
+    --border-color: #aaa;
+    --harmony-blue: #1a69fc;
+    --background-color: #1b1e1e;
+    --disabled-color: #7e8689;
+  }
+
+  #header{
+    background-image: linear-gradient(135deg, #313737, 60%, #1b1e1e);
+  }
+
+  #title{
+    background-color: #fff;
+    background-image: linear-gradient(180deg, #fff 0%, #dde0e0 80%);
+  }
+}
+
+:root.dark{
+  --hover-color: #292e2e;
+  --shape-color: #f0f0f0;
+  --border-color: #aaa;
+  --harmony-blue: #1a69fc;
+  --background-color: #1b1e1e;
+  --disabled-color: #7e8689;
+}
+
+#header.dark{
+  background-image: linear-gradient(135deg, #313737, 60%, #1b1e1e);
+}
+
+#title.dark{
+  background-color: #fff;
+  background-image: linear-gradient(180deg, #fff 0%, #dde0e0 80%);
+}

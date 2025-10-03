@@ -467,9 +467,9 @@
 
   watch(
     text, newVal => {
-      if(newVal.includes("可交易\n")){
+      if(newVal.includes("<b>可交易</b>\n")){
         chosen.value.banner = "tradeable";
-      } else if(newVal.includes("锻造：")){
+      } else if(newVal.includes("<b>锻造：</b>")){
         chosen.value.banner = "forge";
       } else{
         chosen.value.banner = "none";
@@ -531,13 +531,16 @@
     const file = document.getElementsByName("image")[0].files[0];
     const imgLbl = document.getElementById("imgLbl");
 
+    const root = document.documentElement;
+    let rootComputed = getComputedStyle(root);
+
     if(file !== "" && file.type.startsWith("image/")){
       imgUrl.value = URL.createObjectURL(file);
       imageName.value = file.name;
-      imgLbl.style.color = "#313737";
+      imgLbl.style.color = rootComputed.getPropertyValue("--shape-color");
     } else{
       imageName.value = "图片无效...";
-      imgLbl.style.color = "#7e8689";
+      imgLbl.style.color = rootComputed.getPropertyValue("--disabled-color");
     }
   }
 
@@ -1105,7 +1108,7 @@
     align-items: center;
   }
   .subtitle-box label:has(input:checked){
-    color: #313737;
+    color: var(--shape-color);
   }
   .subtitle-box label::after{
     /*content: "○";*/
@@ -1181,6 +1184,10 @@
     background-color: var(--hover-color);
     outline-color: var(--hover-color);
   }
+
+  .option .toggle-box svg path{
+      fill: var(--shape-color);
+    }
 
   .option ul{
     max-height: 0;
@@ -1339,8 +1346,12 @@
     margin: 0;
     font: 300 1.25em var(--font-family);
     line-height: 1.5;
+    color: var(--shape-color);
     background-color: var(--background-color);
     transition: background-color .2s ease;
+  }
+  .text-box textarea::placeholder{
+    color: var(--disabled-color);
   }
   .text-box textarea:active, .text-box textarea:focus{
     background-color: var(--hover-color);
@@ -1519,5 +1530,9 @@
       background-color: var(--hover-color);
       color: var(--shape-color);
     }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    
   }
 </style>

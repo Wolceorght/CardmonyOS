@@ -22,6 +22,12 @@ import { onBeforeMount, ref } from 'vue';
         "CardmonyOS：没有限制、无须等待、完全免费的《炉石传说》卡牌制作工具",
         "添加了版本日志",
       ]
+    },{
+      generation: "CardmonyOS",
+      name: "1.1",
+      log: [
+        "添加了深色模式",
+      ]
     }
   ]
   
