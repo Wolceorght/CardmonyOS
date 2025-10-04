@@ -1,6 +1,7 @@
 <script setup>
   import { onMounted, ref, watch } from 'vue';
-  import CardGenerate from '@/CardGenerate.vue';
+  import CardGenerate from './CardGenerate.vue';
+  import AdvancedFeature from './AdvancedFeature.vue';
 
   const result = ref();
 
@@ -551,12 +552,17 @@
   }
 </script>
 
-<template>
 
-  <div class="preload" style="opacity: 0;">
-    <span style="font-family: 'AR LisuGB Medium', sans-serif;"></span>
-    <span style="font-family: 'BlizzardGlobal', sans-serif;"></span>
-  </div>
+
+
+
+<!------------------------------->
+
+
+
+
+
+<template>
 
   <div class="data">
     
@@ -950,43 +956,56 @@
     </div>
   </div>
 
-  <div class="bar" v-if="!isMobile"></div>
-
-  <div class="card" :class="{previewed: isPreviewed}">
-    <svg class="frame" v-if="!isMobile" width="405" height="502.5" xmlns="http://www.w3.org/2000/svg">
-      <g>
-        <line x1="0" y1="0" x2="32" y2="0" stroke="#1a69fc" stroke-width="16"></line>
-        <line x1="0" y1="0" x2="0" y2="32" stroke="#1a69fc" stroke-width="16"></line>
-      </g>
-      <g>
-        <line x1="405" y1="0" x2="373" y2="0" stroke="#1a69fc" stroke-width="16"></line>
-        <line x1="405" y1="0" x2="405" y2="32" stroke="#1a69fc" stroke-width="16"></line>
-      </g>
-      <g>
-        <line x1="0" y1="502" x2="32" y2="502" stroke="#1a69fc" stroke-width="16"></line>
-        <line x1="0" y1="502" x2="0" y2="470" stroke="#1a69fc" stroke-width="16"></line>
-      </g>
-      <g>
-        <line x1="405" y1="502" x2="373" y2="502" stroke="#1a69fc" stroke-width="16"></line>
-        <line x1="405" y1="502" x2="405" y2="470" stroke="#1a69fc" stroke-width="16"></line>
-      </g>
-    </svg>
-    <CardGenerate :name="name" 
-                  :cost="cost" 
-                  :attack="attack"
-                  :health="health"
-                  :rune="rune"
-                  :text="text"
-                  :race="race"
-                  :second-race="secondRace"
-                  :is-enabled="isEnabled"
-                  :chosen="chosen"
-                  :img-url="imgUrl"
-                  :is-previewed="isPreviewed"
-                  @preview-card-request="previewCard()"
-                  ref="result">
-    </CardGenerate>
+  <div class="right">
+    <div class="advanced">
+      <AdvancedFeature></AdvancedFeature>
+    </div>
+    <div class="card" :class="{previewed: isPreviewed}">
+      <svg class="frame" v-if="!isMobile" width="405" height="502.5" xmlns="http://www.w3.org/2000/svg">
+        <g>
+          <line x1="0" y1="0" x2="32" y2="0" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="0" y1="0" x2="0" y2="32" stroke="#1a69fc" stroke-width="16"></line>
+        </g>
+        <g>
+          <line x1="405" y1="0" x2="373" y2="0" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="405" y1="0" x2="405" y2="32" stroke="#1a69fc" stroke-width="16"></line>
+        </g>
+        <g>
+          <line x1="0" y1="502" x2="32" y2="502" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="0" y1="502" x2="0" y2="470" stroke="#1a69fc" stroke-width="16"></line>
+        </g>
+        <g>
+          <line x1="405" y1="502" x2="373" y2="502" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="405" y1="502" x2="405" y2="470" stroke="#1a69fc" stroke-width="16"></line>
+        </g>
+      </svg>
+      <CardGenerate :name="name" 
+                    :cost="cost" 
+                    :attack="attack"
+                    :health="health"
+                    :rune="rune"
+                    :text="text"
+                    :race="race"
+                    :second-race="secondRace"
+                    :is-enabled="isEnabled"
+                    :chosen="chosen"
+                    :img-url="imgUrl"
+                    :is-previewed="isPreviewed"
+                    @preview-card-request="previewCard()"
+                    ref="result">
+      </CardGenerate>
+    </div>
   </div>
+
+
+
+
+
+<!------------------------------->
+
+
+
+
 
 </template>
 
@@ -1002,7 +1021,6 @@
 
   .data{
     display: grid;
-    width: calc(65% - 2em);
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(6, 6em);
     gap: 1em;
@@ -1412,9 +1430,16 @@
     color: var(--disabled-color) !important;
   }
 
-  
-  .bar{
-    margin: 0 1em;
+
+  .right{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+  }
+  .advanced{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .card{
@@ -1424,7 +1449,6 @@
     */
     width: 405px;
     height: 502.5px;
-    align-self: center;
     position: relative;
   }
   .frame{

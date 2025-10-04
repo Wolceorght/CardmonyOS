@@ -84,6 +84,7 @@ b{
 }
 #app{
   display: flex;
+  gap: 2em;
   position: relative;
 }
 

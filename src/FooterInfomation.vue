@@ -27,6 +27,7 @@ import { onBeforeMount, ref } from 'vue';
       name: "1.1",
       log: [
         "添加了深色模式",
+        "添加功能：在输入主动关键词（可交易、锻造）时，自动启用对应旗帜",
       ]
     }
   ]
