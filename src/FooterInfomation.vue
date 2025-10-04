@@ -24,10 +24,9 @@ import { onBeforeMount, ref } from 'vue';
       ]
     },{
       generation: "CardmonyOS",
-      name: "1.1",
+      name: "1.0.1",
       log: [
-        "添加了深色模式",
-        "添加功能：在输入主动关键词（可交易、锻造）时，自动启用对应旗帜",
+        "添加了「穿越时间流」水印"
       ]
     }
   ]
