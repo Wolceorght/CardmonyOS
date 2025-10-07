@@ -72,11 +72,10 @@
   })
   })
 
-  let state = true,
-      watchCount = 0;
-  watch(
+  let oldIsPreviewed = null;
+  watch(  
     [props, loaded], (newVal) => {
-      if(newVal[0].isPreviewed === state || watchCount === 0){
+      if(oldIsPreviewed === null || oldIsPreviewed === newVal[0].isPreviewed){
         if(loaded.value && fctx.value !== null && tctx.value !== null){
           setTimeout(() => {
             drawFrame(props.attack, 
@@ -96,15 +95,27 @@
                     props.chosen);
           }, 1)
         }
-      } else if(watchCount !== 0){
-        state = !state;
       }
-      watchCount ++;
+      oldIsPreviewed = newVal[0].isPreviewed;
     },
     {
       deep: true
     }
   );
+
+  const isTextTooLong = ref(false);
+  watch(
+    isTextTooLong, (newVal) => {
+      const h2 = document.querySelector("div.text h2");
+      if(newVal){
+        h2.classList.add("error");
+        h2.textContent = "卡牌描述过长";
+      } else{
+        h2.classList.remove("error");
+        h2.textContent = "卡牌描述";
+      }
+    }
+  )
 
   const illustrating = computed(() => {
     if(loaded.value && props.imgUrl !== ""){
@@ -736,6 +747,8 @@
 
   async function drawText(te, type){
 
+    isTextTooLong.value = false;
+
     //const ns = "http://www.w3.org/2000/svg";
     const leftShape = document.createElement("div");
     const rightShape = document.createElement("div");
@@ -878,7 +891,8 @@
         break;
       }
     }
-    if(!nextIndex){ //不在范围内，nextIndex 没有被赋值
+    if(!nextIndex){ //超出范围，nextIndex 没有被赋值
+      isTextTooLong.value = true;
       return;
     }
 
@@ -1099,6 +1113,7 @@
 
     while(newHeight > h){ //避免换行导致的溢出
       if(isMin){ //如果已经是最小字号——换言之无法避免即将到来的溢出，停止绘制
+        isTextTooLong.value = true;
         return;
       }
       size = chosenSize[nextIndex].size;

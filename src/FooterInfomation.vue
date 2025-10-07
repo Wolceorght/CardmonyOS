@@ -28,6 +28,14 @@ import { onBeforeMount, ref } from 'vue';
       log: [
         "添加了「穿越时间流」水印"
       ]
+    },{
+      generation: "CardmonyOS",
+      name: "1.1",
+      log: [
+        "添加了「文字稿」功能：有史以来最便捷的卡牌制作方式",
+        "添加了深色模式",
+        "修复了第一次输入表单时卡牌预览不更新的问题"
+      ]
     }
   ]
   
@@ -73,7 +81,7 @@ import { onBeforeMount, ref } from 'vue';
       <br>
 
       <a href="https://keshu.space/">
-        薄露轩
+        刻疏 - 薄露轩
       </a>
       <span class="vertical-bar">|</span>
       <a href="https://github.com/Wolceorght/CardmonyOS">
@@ -209,21 +217,6 @@ import { onBeforeMount, ref } from 'vue';
     color: var(--shape-color);
   }
 
-  #ver-box::-webkit-scrollbar{
-    width: 4px;
-  }
-  #ver-box::-webkit-scrollbar-thumb{
-    background-color: #858585;
-    border-radius: 2px;
-  }
-  #ver-box::-webkit-scrollbar-track{
-    background-color: var(--background-color);
-    border-radius: 2px;
-  }
-  #ver-box::-webkit-scrollbar-button{
-    height: 4px;
-    background-color: transparent;
-  }
   
   #ver-frame{
     width: inherit;
@@ -373,6 +366,22 @@ import { onBeforeMount, ref } from 'vue';
 
     #ver-button:hover .cardmony-os::after{
       background-color: var(--harmony-blue);
+    }
+
+    #ver-box::-webkit-scrollbar{
+      width: 4px;
+    }
+    #ver-box::-webkit-scrollbar-thumb{
+      background-color: #858585;
+      border-radius: 2px;
+    }
+    #ver-box::-webkit-scrollbar-track{
+      background-color: var(--background-color);
+      border-radius: 2px;
+    }
+    #ver-box::-webkit-scrollbar-button{
+      height: 4px;
+      background-color: transparent;
     }
   }
 

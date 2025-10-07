@@ -1,6 +1,6 @@
 @import url("@/assets/font/font.css");
 
-*{
+*:not(#example-box){
   touch-action: pan-y;
 }
 
@@ -11,6 +11,7 @@
   --harmony-blue: #1a69fc;
   --background-color: #fff;
   --disabled-color: #7e8689;
+  --error-color: #fc251a;
   --value-font: 300 2em var(--font-family);
   --font-family: "Inter", "SF Pro", "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft Yahei", sans-serif
 }
@@ -140,6 +141,8 @@ b{
 
   #app{
     width: 100%;
+    flex-direction: column;
+    gap: 0;
   }
 
 }

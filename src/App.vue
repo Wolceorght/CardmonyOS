@@ -1,7 +1,8 @@
 <script setup>
-  import { onMounted, ref, watch } from 'vue';
+  import { onMounted, reactive, ref, watch } from 'vue';
   import CardGenerate from './CardGenerate.vue';
-  import AdvancedFeature from './AdvancedFeature.vue';
+  import DraftInput from './DraftInput.vue';
+  import { typeArray, classArray, campArray, rarityArray, bannerArray, emblemArray, miniEmblemArray } from './array.js';
 
   const result = ref();
 
@@ -9,7 +10,7 @@
         cost = ref(""),
         attack = ref(""),
         health = ref(""),
-        rune = ref({
+        rune = reactive({
           blood: "",
           frost: "",
           unholy: ""
@@ -25,7 +26,7 @@
         imageName = ref("选择图片..."),
         miniTitle = ref("迷你系列");
 
-  const isOpened = ref({
+  const isOpened = reactive({
           class: false,
           optionalClass: false,
           rarity: false,
@@ -33,7 +34,7 @@
           banner: false,
           emblem: false
         }),
-        isEnabled = ref({
+        isEnabled = reactive({
           secondClass: false,
           multiClass: false,
           dragon: false,
@@ -41,7 +42,7 @@
           mini: false
         })
 
-  const chosen = ref({
+  const chosen = reactive({
           type: "minion",
           class: "neutral",
           secondClass: "dk",
@@ -50,316 +51,6 @@
           banner: "none",
           emblem: "none"
         })
-
-  const typeArray = ref([
-    {
-      value: "minion",
-      name: "随从"
-    },{
-      value: "spell",
-      name: "法术"
-    },{
-      value: "weapon",
-      name: "武器"
-    },{
-      value: "location",
-      name: "地标"
-    },{
-      value: "hero",
-      name: "英雄"
-    },{
-      value: "power",
-      name: "英雄技能"
-    }
-  ]),
-  classArray = ref([
-    {
-      value: "neutral",
-      name: "中立"
-    },{
-      value: "dk",
-      name: "死亡骑士"
-    },{
-      value: "dh",
-      name: "恶魔猎手"
-    },{
-      value: "druid",
-      name: "德鲁伊"
-    },{
-      value: "hunter",
-      name: "猎人"
-    },{
-      value: "mage",
-      name: "法师"
-    },{
-      value: "paladin",
-      name: "圣骑士"
-    },{
-      value: "priest",
-      name: "牧师"
-    },{
-      value: "rogue",
-      name: "潜行者"
-    },{
-      value: "shaman",
-      name: "萨满祭司"
-    },{
-      value: "warlock",
-      name: "术士"
-    },{
-      value: "warrior",
-      name: "战士"
-    }
-  ]),
-  campArray = ref([
-    {
-      value: "goons",
-      name: "污手党"
-    },{
-      value: "kabal",
-      name: "暗金教"
-    },{
-      value: "lotus",
-      name: "玉莲帮"
-    },{
-      value: "protoss",
-      name: "星灵"
-    },{
-      value: "terran",
-      name: "人类"
-    },{
-      value: "zerg",
-      name: "异虫"
-    }
-  ]),
-  rarityArray = ref([
-    {
-      value: "free",
-      name: "免费"
-    },{
-      value: "common",
-      name: "普通"
-    },{
-      value: "rare",
-      name: "稀有"
-    },{
-      value: "epic",
-      name: "史诗"
-    },{
-      value: "legendary",
-      name: "传说"
-    }
-  ]),
-  bannerArray = ref([
-    {
-      value: "none",
-      name: "无"
-    },{
-      value: "tradeable",
-      name: "可交易"
-    },{
-      value: "forge",
-      name: "锻造"
-    }
-  ]),
-  emblemArray = ref([
-    {
-      value: "none",
-      name: "无"
-    },{
-      value: "classic",
-      name: "经典"
-    },{
-      value: "legacy",
-      name: "怀旧"
-    },{
-      value: "cc",
-      name: "经典模式"
-    },{
-      value: "event",
-      name: "活动"
-    },{
-      value: "dhi",
-      name: "恶魔猎手新兵"
-    },{
-      value: "poa",
-      name: "阿尔萨斯之路"
-    },{
-      value: "cot",
-      name: "时光之穴"
-    },{
-      value: "cs2021",
-      name: "狮鹫年核心系列"
-    },{
-      value: "cs2022",
-      name: "多头蛇年核心系列"
-    },{
-      value: "cs2023",
-      name: "独狼年核心系列"
-    },{
-      value: "cs2024",
-      name: "天马年核心系列"
-    },{
-      value: "cs2025",
-      name: "迅猛龙年核心系列"
-    },{
-      value: "naxx",
-      name: "纳克萨玛斯的诅咒"
-    },{
-      value: "gvg",
-      name: "地精大战侏儒"
-    },{
-      value: "brm",
-      name: "黑石山的火焰"
-    },{
-      value: "tgt",
-      name: "冠军的试炼"
-    },{
-      value: "loe",
-      name: "探险者协会"
-    },{
-      value: "og",
-      name: "上古之神的低语"
-    },{
-      value: "kara",
-      name: "卡拉赞之夜"
-    },{
-      value: "msg",
-      name: "龙争虎斗加基森"
-    },{
-      value: "ung",
-      name: "勇闯安戈洛"
-    },{
-      value: "kft",
-      name: "冰封王座的骑士"
-    },{
-      value: "k&c",
-      name: "狗头人与地下世界"
-    },{
-      value: "tww",
-      name: "女巫森林"
-    },{
-      value: "bp",
-      name: "砰砰计划"
-    },{
-      value: "rr",
-      name: "拉斯塔哈的大乱斗"
-    },{
-      value: "ros",
-      name: "暗影崛起"
-    },{
-      value: "sou",
-      name: "奥丹姆奇兵"
-    },{
-      value: "dod",
-      name: "巨龙降临"
-    },{
-      value: "aoo",
-      name: "外域的灰烬"
-    },{
-      value: "sa",
-      name: "通灵学园"
-    },{
-      value: "dmf",
-      name: "疯狂的暗月马戏团"
-    },{
-      value: "fitb",
-      name: "贫瘠之地的锤炼"
-    },{
-      value: "uis",
-      name: "暴风城下的集结"
-    },{
-      value: "fav",
-      name: "奥特兰克的决裂"
-    },{
-      value: "vsc",
-      name: "探寻沉没之城"
-    },{
-      value: "mcn",
-      name: "纳斯利亚堡的悬案"
-    },{
-      value: "mlk",
-      name: "巫妖王的进军"
-    },{
-      value: "fol",
-      name: "传奇音乐节"
-    },{
-      value: "ttn",
-      name: "泰坦诸神"
-    },{
-      value: "sitb",
-      name: "决战荒芜之地"
-    },{
-      value: "ww",
-      name: "威兹班的工坊"
-    },{
-      value: "pip",
-      name: "胜地历险记"
-    },{
-      value: "gdb",
-      name: "深暗领域"
-    },{
-      value: "ted",
-      name: "漫游翡翠梦境"
-    },{
-      value: "tlc",
-      name: "安戈洛龟途"
-    },{
-      value: "att",
-      name: "穿越时间流"
-    }
-  ]),
-  miniEmblemArray = ref([
-    {
-      value: "dod",
-      name: "巨龙降临"
-    },{
-      value: "dmf",
-      name: "疯狂的暗月马戏团"
-    },{
-      value: "fitb",
-      name: "贫瘠之地的锤炼"
-    },{
-      value: "uis",
-      name: "暴风城下的集结"
-    },{
-      value: "fav",
-      name: "奥特兰克的决裂"
-    },{
-      value: "vsc",
-      name: "探寻沉没之城"
-    },{
-      value: "mcn",
-      name: "纳斯利亚堡的悬案"
-    },{
-      value: "mlk",
-      name: "巫妖王的进军"
-    },{
-      value: "fol",
-      name: "传奇音乐节"
-    },{
-      value: "ttn",
-      name: "泰坦诸神"
-    },{
-      value: "sitb",
-      name: "决战荒芜之地"
-    },{
-      value: "ww",
-      name: "威兹班的工坊"
-    },{
-      value: "pip",
-      name: "胜地历险记"
-    },{
-      value: "gdb",
-      name: "深暗领域"
-    },{
-      value: "ted",
-      name: "漫游翡翠梦境"
-    },{
-      value: "tlc",
-      name: "安戈洛龟途"
-    }
-  ])
 
   const isMobile = ref(false),
         isPreviewed = ref(false);
@@ -389,11 +80,25 @@
     }
   }
 
+  watch(
+    isMobile, newVal => {
+      const draft = document.getElementsByClassName("draft")[0];
+      if(newVal){
+        const data = document.getElementsByClassName("data")[0];
+        data.appendChild(draft);
+      } else{
+        const right = document.getElementsByClassName("right")[0];
+        const card = document.getElementsByClassName("card")[0];
+        right.insertBefore(draft, card);
+      }
+    }
+  )
+
   let sec = false, mul = false;
   watch(
     isEnabled, newVal => {
-      for(let i in isOpened.value){//isEnabled 改变时收起所有下拉选择框
-        isOpened.value[i] = false;
+      for(let i in isOpened){//isEnabled 改变时收起所有下拉选择框
+        isOpened[i] = false;
       }
       if(newVal.secondClass && !newVal.multiClass){ //使 secondClass 和 multiClass 不能同时为真
         sec = true, mul = false;
@@ -407,7 +112,7 @@
       }
 
       if(newVal.multiClass){
-        chosen.value.class = "neutral";
+        chosen.class = "neutral";
       }
       if(!newVal.secondRace){ //第二种族关闭时将其清空
         secondRace.value = "";
@@ -441,29 +146,29 @@
       }
 
       if(newVal.type !== "minion"){
-        isEnabled.value.secondRace = false;
+        isEnabled.secondRace = false;
       }
 
       if(newVal.type === "power"){
-        isEnabled.value.secondClass =
-        isEnabled.value.multiClass =
-        isEnabled.value.dragon = 
-        isEnabled.value.mini = false;
+        isEnabled.secondClass =
+        isEnabled.multiClass =
+        isEnabled.dragon = 
+        isEnabled.mini = false;
 
-        chosen.value.rarity = "free";
-        chosen.value.banner = "none";
-        chosen.value.emblem = "none";
+        chosen.rarity = "free";
+        chosen.banner = "none";
+        chosen.emblem = "none";
       }
 
       if(newVal.rarity === "legendary"){ 
-        isEnabled.value.dragon = true;
+        isEnabled.dragon = true;
       } else{
-        isEnabled.value.dragon = false;
+        isEnabled.dragon = false;
       }
 
       //防止加载不存在的迷你系列水印
-      if(!miniEmblemArray.value.map(obj => obj.value).includes(newVal.emblem)){
-        isEnabled.value.mini = false; 
+      if(!miniEmblemArray.map(obj => obj.value).includes(newVal.emblem)){
+        isEnabled.mini = false; 
       }
     },
     { deep: true }
@@ -472,25 +177,25 @@
   watch(
     text, newVal => {
       if(newVal.includes("<b>可交易</b>\n")){
-        chosen.value.banner = "tradeable";
+        chosen.banner = "tradeable";
       } else if(newVal.includes("<b>锻造：</b>")){
-        chosen.value.banner = "forge";
+        chosen.banner = "forge";
       } else{
-        chosen.value.banner = "none";
+        chosen.banner = "none";
       }
     }
   )
 
-  function getNameById(val, arr){
+  function getNameByVal(val, arr){
     return arr.find(item => item.value === val).name;
   }
 
   //改变下拉选择框展开、收起状态
   function dropOption(val){
-    isOpened.value[val] = !isOpened.value[val];
-    for(let i in isOpened.value){
+    isOpened[val] = !isOpened[val];
+    for(let i in isOpened){
       if(i !== val){
-        isOpened.value[i] = false;
+        isOpened[i] = false;
       }
     }
   }
@@ -498,12 +203,12 @@
   //限制符文数不得超过3个
   function runeLimit(val){ 
     let count = 0;
-    for(let i in rune.value){
-      count += (isNaN(parseInt(rune.value[i])) ? 0 : parseInt(rune.value[i])); //如果是空，计数器 += 0
+    for(let i in rune){
+      count += (isNaN(parseInt(rune[i])) ? 0 : parseInt(rune[i])); //如果是空，计数器 += 0
     }
     if(count > 3){
-      count -= parseInt(rune.value[val]);
-      rune.value[val] = (3 - count) + "";
+      count -= parseInt(rune[val]);
+      rune[val] = (3 - count) + "";
     }
   }
 
@@ -521,8 +226,8 @@
 
   //如果选中的系列有迷你系列，则显示
   function miniAccess(){
-    for(let ele of miniEmblemArray.value){
-      if(ele.value === chosen.value.emblem){
+    for(let ele of miniEmblemArray){
+      if(ele.value === chosen.emblem){
         return true; 
       }
     }
@@ -592,7 +297,7 @@
       <div class="select">
         <div class="option" :class="{'open': isOpened.class}">
           <div class="toggle-box" @click="dropOption('class')">
-            <div class="toggle">{{ getNameById(chosen.class, classArray) }}</div>
+            <div class="toggle">{{ getNameByVal(chosen.class, classArray) }}</div>
             <div><svg style="vertical-align: middle" width="1em" height="1em" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#222222" d="M512 657.723077c-7.876923 0-15.753846-3.938462-19.692308-7.876923l-240.246154-232.369231c-11.815385-11.815385-11.815385-31.507692 0-43.323077 11.815385-11.815385 31.507692-11.815385 43.323077 0l220.553847 212.676923 220.553846-212.676923c11.815385-11.815385 31.507692-11.815385 43.323077 0 11.815385 11.815385 11.815385 31.507692 0 43.323077l-240.246154 232.369231c-11.815385 3.938462-19.692308 7.876923-27.569231 7.876923z"  /></svg></div>
           </div>
           <ul>
@@ -616,7 +321,7 @@
       <div class="select">
         <div class="option" :class="{'open': isOpened.optionalClass}">
           <div class="toggle-box" @click="dropOption('optionalClass')">
-            <div class="toggle">{{ getNameById(chosen.secondClass, classArray) }}</div>
+            <div class="toggle">{{ getNameByVal(chosen.secondClass, classArray) }}</div>
             <div><svg style="vertical-align: middle" width="1em" height="1em" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#222222" d="M512 657.723077c-7.876923 0-15.753846-3.938462-19.692308-7.876923l-240.246154-232.369231c-11.815385-11.815385-11.815385-31.507692 0-43.323077 11.815385-11.815385 31.507692-11.815385 43.323077 0l220.553847 212.676923 220.553846-212.676923c11.815385-11.815385 31.507692-11.815385 43.323077 0 11.815385 11.815385 11.815385 31.507692 0 43.323077l-240.246154 232.369231c-11.815385 3.938462-19.692308 7.876923-27.569231 7.876923z"  /></svg></div>
           </div>
           <ul>
@@ -640,7 +345,7 @@
       <div class="select">
         <div class="option" :class="{'open': isOpened.optionalClass}">
           <div class="toggle-box" @click="dropOption('optionalClass')">
-            <div class="toggle">{{ getNameById(chosen.multiClass, campArray) }}</div>
+            <div class="toggle">{{ getNameByVal(chosen.multiClass, campArray) }}</div>
             <div><svg style="vertical-align: middle" width="1em" height="1em" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#222222" d="M512 657.723077c-7.876923 0-15.753846-3.938462-19.692308-7.876923l-240.246154-232.369231c-11.815385-11.815385-11.815385-31.507692 0-43.323077 11.815385-11.815385 31.507692-11.815385 43.323077 0l220.553847 212.676923 220.553846-212.676923c11.815385-11.815385 31.507692-11.815385 43.323077 0 11.815385 11.815385 11.815385 31.507692 0 43.323077l-240.246154 232.369231c-11.815385 3.938462-19.692308 7.876923-27.569231 7.876923z"  /></svg></div>
           </div>
           <ul>
@@ -674,7 +379,7 @@
       <div class="select">
         <div class="option" :class="{'open': isOpened.rarity}">
           <div class="toggle-box" @click="dropOption('rarity')">
-            <div class="toggle">{{ getNameById(chosen.rarity, rarityArray) }}</div>
+            <div class="toggle">{{ getNameByVal(chosen.rarity, rarityArray) }}</div>
             <div><svg style="vertical-align: middle" width="1em" height="1em" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#222222" d="M512 657.723077c-7.876923 0-15.753846-3.938462-19.692308-7.876923l-240.246154-232.369231c-11.815385-11.815385-11.815385-31.507692 0-43.323077 11.815385-11.815385 31.507692-11.815385 43.323077 0l220.553847 212.676923 220.553846-212.676923c11.815385-11.815385 31.507692-11.815385 43.323077 0 11.815385 11.815385 11.815385 31.507692 0 43.323077l-240.246154 232.369231c-11.815385 3.938462-19.692308 7.876923-27.569231 7.876923z"  /></svg></div>
           </div>
           <ul>
@@ -698,7 +403,7 @@
       <div class="select">
         <div class="option" :class="{'open': isOpened.type}">
           <div class="toggle-box" @click="dropOption('type')">
-            <div class="toggle">{{ getNameById(chosen.type, typeArray) }}</div>
+            <div class="toggle">{{ getNameByVal(chosen.type, typeArray) }}</div>
             <div><svg style="vertical-align: middle" width="1em" height="1em" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#222222" d="M512 657.723077c-7.876923 0-15.753846-3.938462-19.692308-7.876923l-240.246154-232.369231c-11.815385-11.815385-11.815385-31.507692 0-43.323077 11.815385-11.815385 31.507692-11.815385 43.323077 0l220.553847 212.676923 220.553846-212.676923c11.815385-11.815385 31.507692-11.815385 43.323077 0 11.815385 11.815385 11.815385 31.507692 0 43.323077l-240.246154 232.369231c-11.815385 3.938462-19.692308 7.876923-27.569231 7.876923z"  /></svg></div>
           </div>
           <ul>
@@ -737,7 +442,7 @@
       <div class="select">
         <div class="option" :class="{'open': isOpened.banner}">
           <div class="toggle-box" @click="dropOption('banner')">
-            <div class="toggle">{{ getNameById(chosen.banner, bannerArray) }}</div>
+            <div class="toggle">{{ getNameByVal(chosen.banner, bannerArray) }}</div>
             <div><svg style="vertical-align: middle" width="1em" height="1em" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#222222" d="M512 657.723077c-7.876923 0-15.753846-3.938462-19.692308-7.876923l-240.246154-232.369231c-11.815385-11.815385-11.815385-31.507692 0-43.323077 11.815385-11.815385 31.507692-11.815385 43.323077 0l220.553847 212.676923 220.553846-212.676923c11.815385-11.815385 31.507692-11.815385 43.323077 0 11.815385 11.815385 11.815385 31.507692 0 43.323077l-240.246154 232.369231c-11.815385 3.938462-19.692308 7.876923-27.569231 7.876923z"  /></svg></div>
           </div>
           <ul>
@@ -780,7 +485,7 @@
                     name="cost"
                     placeholder="3"
                     autocomplete="off"
-                    :style="{width: `clamp(60%, calc(${cost.length}ch + .5em), 100%`}"
+                    :style="{width: `clamp(60%, calc(${cost ? cost.length : 0}ch + .5em), 100%`}"
                     v-model="cost">
           </div>
         </div>
@@ -795,7 +500,7 @@
                     name="attack"
                     placeholder="2"
                     autocomplete="off"
-                    :style="{width: `clamp(60%, calc(${attack.length}ch + .5em), 100%`}"
+                    :style="{width: `clamp(60%, calc(${attack ? attack.length : 0}ch + .5em), 100%`}"
                     v-model="attack">
           </div>
         </div>
@@ -811,7 +516,7 @@
                     name="health"
                     placeholder="4"
                     autocomplete="off"
-                    :style="{width: `clamp(60%, calc(${health.length}ch + .5em), 100%`}"
+                    :style="{width: `clamp(60%, calc(${health ? health.length : 0}ch + .5em), 100%`}"
                     v-model="health">
           </div>
         </div>
@@ -826,6 +531,7 @@
           <div>
             <input type="text"
                     name="runeBlood"
+                    placeholder="0"
                     autocomplete="off"
                     @change="runeLimit('blood')"
                     v-model="rune.blood">
@@ -840,6 +546,7 @@
           <div>
             <input type="text"
                     name="runeFrost"
+                    placeholder="0"
                     autocomplete="off"
                     @change="runeLimit('frost')"
                     v-model="rune.frost">
@@ -854,6 +561,7 @@
           <div>
             <input type="text"
                     name="runeUnholy"
+                    placeholder="0"
                     autocomplete="off"
                     @change="runeLimit('unholy')"
                     v-model="rune.unholy">
@@ -914,7 +622,7 @@
       <div class="select">
         <div class="option" :class="{'open': isOpened.emblem}">
           <div class="toggle-box" @click="dropOption('emblem')">
-            <div class="toggle">{{ getNameById(chosen.emblem, emblemArray) }}</div>
+            <div class="toggle">{{ getNameByVal(chosen.emblem, emblemArray) }}</div>
             <div><svg style="vertical-align: middle" width="1em" height="1em" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#222222" d="M512 657.723077c-7.876923 0-15.753846-3.938462-19.692308-7.876923l-240.246154-232.369231c-11.815385-11.815385-11.815385-31.507692 0-43.323077 11.815385-11.815385 31.507692-11.815385 43.323077 0l220.553847 212.676923 220.553846-212.676923c11.815385-11.815385 31.507692-11.815385 43.323077 0 11.815385 11.815385 11.815385 31.507692 0 43.323077l-240.246154 232.369231c-11.815385 3.938462-19.692308 7.876923-27.569231 7.876923z"  /></svg></div>
           </div>
           <ul>
@@ -960,8 +668,18 @@
   </div>
 
   <div class="right">
-    <div class="advanced">
-      <AdvancedFeature></AdvancedFeature>
+    <div class="draft">
+      <DraftInput v-model:name="name"
+                  v-model:cost="cost"
+                  v-model:attack="attack"
+                  v-model:health="health"
+                  v-model:rune="rune"
+                  v-model:text="text"
+                  v-model:race="race"
+                  v-model:second-race="secondRace"
+                  v-model:is-enabled="isEnabled"
+                  v-model:chosen="chosen">
+      </DraftInput>
     </div>
     <div class="card" :class="{previewed: isPreviewed}">
       <svg class="frame" v-if="!isMobile" width="405" height="502.5" xmlns="http://www.w3.org/2000/svg">
@@ -1104,6 +822,12 @@
   .stat .subtitle-box h2, .rune .subtitle-box h2{
     text-align: center;
   }
+  .text .subtitle-box h2{
+    transition: color .2s ease;
+  }
+  .text .subtitle-box h2.error{
+    color: var(--error-color);
+  }
   
   .subtitle-box .checkbox{
     transform: translateY(-.25em);
@@ -1166,6 +890,8 @@
     font-size: 1.25em;
     line-height: 1;
     color: var(--disabled-color);
+
+    cursor: pointer;
   }
   .subtitle-box button:active{
     outline-color: var(--hover-color);
@@ -1228,21 +954,7 @@
     background-color: var(--background-color);
   }
 
-  .option ul::-webkit-scrollbar{
-    width: 4px;
-  }
-  .option ul::-webkit-scrollbar-thumb{
-    background-color: #858585;
-    border-radius: 2px;
-  }
-  .option ul::-webkit-scrollbar-track{
-    background-color: var(--background-color);
-    border-radius: 2px;
-  }
-  .option ul::-webkit-scrollbar-button{
-    height: 4px;
-    background-color: transparent;
-  }
+  
 
   /* 下拉选择框堆叠 */
   .optional-class .option ul{
@@ -1439,7 +1151,7 @@
     flex-direction: column;
     gap: 1.5em;
   }
-  .advanced{
+  .draft{
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -1467,7 +1179,7 @@
     .data{
       width: 100%;
       grid-template-columns: repeat(9, 1fr);
-      grid-template-rows: repeat(11, 6em);
+      grid-template-rows: repeat(13, 6em);
       grid-template-areas: 'c1 c1 c1 c1 c1 ra ra ra ra'
                            'c2 c2 c2 c2 c2 ty ty ty ty'
                            'na na na na na na na na na'
@@ -1477,6 +1189,8 @@
                            'te te te te te te te te te'
                            'ba ba ba ba ba r1 r1 r1 r1'
                            'em em em em em r2 r2 r2 r2'
+                           'dr dr dr dr dr dr dr dr dr'
+                           'dr dr dr dr dr dr dr dr dr'
                            'im im im im im im pr pr pr'
                            'sa sa sa sa sa sa sa sa sa';
     }
@@ -1519,6 +1233,10 @@
     .card.previewed{
       max-height: 100dvh;
     }
+
+    .draft{
+      grid-area: dr;
+    }
   }
 
   @media (hover: hover) {
@@ -1556,6 +1274,22 @@
     .command-button:hover{
       background-color: var(--hover-color);
       color: var(--shape-color);
+    }
+
+    .option ul::-webkit-scrollbar{
+      width: 4px;
+    }
+    .option ul::-webkit-scrollbar-thumb{
+      background-color: #858585;
+      border-radius: 2px;
+    }
+    .option ul::-webkit-scrollbar-track{
+      background-color: var(--background-color);
+      border-radius: 2px;
+    }
+    .option ul::-webkit-scrollbar-button{
+      height: 4px;
+      background-color: transparent;
     }
   }
 
