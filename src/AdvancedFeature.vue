@@ -382,6 +382,7 @@
   function parseDraft(str){
 
     dataInit();
+    chosenTemp.emblem = chosen.value.emblem;
 
     try{
       const [frontMatter, cardText] = sliceDraft(str);

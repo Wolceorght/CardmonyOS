@@ -1,7 +1,7 @@
 <script setup>
   import { onMounted, reactive, ref, watch } from 'vue';
   import CardGenerate from './CardGenerate.vue';
-  import DraftInput from './DraftInput.vue';
+  import AdvancedFeature from './AdvancedFeature.vue';
   import { typeArray, classArray, campArray, rarityArray, bannerArray, emblemArray, miniEmblemArray } from './array.js';
 
   const result = ref();
@@ -82,14 +82,14 @@
 
   watch(
     isMobile, newVal => {
-      const draft = document.getElementsByClassName("draft")[0];
+      const advanced = document.getElementsByClassName("advanced")[0];
       if(newVal){
         const data = document.getElementsByClassName("data")[0];
-        data.appendChild(draft);
+        data.appendChild(advanced);
       } else{
         const right = document.getElementsByClassName("right")[0];
         const card = document.getElementsByClassName("card")[0];
-        right.insertBefore(draft, card);
+        right.insertBefore(advanced, card);
       }
     }
   )
@@ -668,8 +668,8 @@
   </div>
 
   <div class="right">
-    <div class="draft">
-      <DraftInput v-model:name="name"
+    <div class="advanced">
+      <AdvancedFeature v-model:name="name"
                   v-model:cost="cost"
                   v-model:attack="attack"
                   v-model:health="health"
@@ -679,7 +679,7 @@
                   v-model:second-race="secondRace"
                   v-model:is-enabled="isEnabled"
                   v-model:chosen="chosen">
-      </DraftInput>
+      </AdvancedFeature>
     </div>
     <div class="card" :class="{previewed: isPreviewed}">
       <svg class="frame" v-if="!isMobile" width="405" height="502.5" xmlns="http://www.w3.org/2000/svg">
@@ -1151,7 +1151,7 @@
     flex-direction: column;
     gap: 1.5em;
   }
-  .draft{
+  .advanced{
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -1234,7 +1234,7 @@
       max-height: 100dvh;
     }
 
-    .draft{
+    .advanced{
       grid-area: dr;
     }
   }

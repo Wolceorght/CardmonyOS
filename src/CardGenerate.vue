@@ -401,7 +401,11 @@
       fctx.value.drawImage(await getImg(`${cho.type}-name`), 0, 0);
       
       if(cho.banner !== "none"){
-        fctx.value.drawImage(await getImg(`ba-${cho.banner}`), 0, 0)
+        if(cho.type === "location"){
+          fctx.value.drawImage(await getImg(`ba-${cho.banner}`), 0, 8)
+        } else{
+          fctx.value.drawImage(await getImg(`ba-${cho.banner}`), 0, 0)
+        }
       }
 
       
@@ -769,10 +773,12 @@
     boldText.forEach(element => {
       element.style.fontWeight = "400";
       let strokeWidth = ".05em";
+      /*
       const userAgent = navigator.userAgent;
       if(userAgent.indexOf("Firefox") !== -1){
         strokeWidth = ".02em";
       }
+      */
       element.style.textShadow = `0 0 ${strokeWidth} ${color},
                                   0 0 ${strokeWidth} ${color}`;
     })
@@ -1235,7 +1241,11 @@
     
     if(co !== ""){
       if(cho.type !== "power"){
-        drawStrokedNumber(co, 114, 112, 123);
+        if(cho.type === "location"){
+          drawStrokedNumber(co, 114, 112, 131);
+        } else {
+          drawStrokedNumber(co, 114, 112, 123);
+        }
       } else{
         drawStrokedNumber(co, 92.8, 268, 109);
       }

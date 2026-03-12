@@ -26,7 +26,7 @@ import { onBeforeMount, ref } from 'vue';
       generation: "CardmonyOS",
       name: "1.0.1",
       log: [
-        "添加了「穿越时间流」水印"
+        "水印更新"
       ]
     },{
       generation: "CardmonyOS",
@@ -36,7 +36,13 @@ import { onBeforeMount, ref } from 'vue';
         "添加了深色模式",
         "修复了第一次输入表单时卡牌预览不更新的问题"
       ]
-    }
+    },{
+      generation: "CardmonyOS",
+      name: "1.1.1",
+      log: [
+        "水印更新"
+      ]
+    },
   ]
   
   onBeforeMount(() => {
@@ -81,7 +87,7 @@ import { onBeforeMount, ref } from 'vue';
       <br>
 
       <a href="https://keshu.space/">
-        刻疏 - 薄露轩
+        薄露轩
       </a>
       <span class="vertical-bar">|</span>
       <a href="https://github.com/Wolceorght/CardmonyOS">

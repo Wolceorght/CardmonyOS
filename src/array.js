@@ -254,7 +254,14 @@ export const emblemArray = [
     },{
       value: "att",
       name: "穿越时间流"
-    }
+    },{
+      value: "cat",
+      name: "大地的裂变"
+    },
+    /*{
+      value: "anm",
+      name: "阿尼美志略"
+    }*/
   ];
 export const miniEmblemArray = [
     {
@@ -305,6 +312,9 @@ export const miniEmblemArray = [
     },{
       value: "tlc",
       name: "安戈洛龟途"
+    },{
+      value: "att",
+      name: "穿越时间流"
     }
   ];
 export const keyWordArray = [
