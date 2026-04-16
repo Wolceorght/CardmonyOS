@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue';
-  import { typeArray, classArray, campArray, rarityArray, keyWordArray } from './array.js';
+  import { typeArray, classArray, campArray, rarityArray, keyWordArray } from './array.json';
 
   const name = defineModel("name", {type: String}),
         cost = defineModel("cost", {type: String}),
@@ -462,8 +462,8 @@
         <div id="help-title">
           文字稿
         </div>
-        <p>「文字稿」功能是专为批量、快速制作卡牌而设计的全新功能。只需输入满足一定格式的文字稿，即可一键自动填写左侧表单，省却逐一选择的烦恼。</p>
-        <p>文字稿由以下部分组成：</p>
+        <p>「文字稿」功能是专为批量、快速制作卡牌而设计的功能。只需输入满足一定格式的文字稿，即可一键自动填写左侧表单，省却逐一选择的烦恼。</p>
+        <p>文字稿由以下部分组成：（点击以展开详细说明）</p>
         <div id="manual">
           <div class="row">
             <b>第一行</b><br>

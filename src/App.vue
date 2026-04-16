@@ -2,7 +2,7 @@
   import { onMounted, reactive, ref, watch } from 'vue';
   import CardGenerate from './CardGenerate.vue';
   import AdvancedFeature from './AdvancedFeature.vue';
-  import { typeArray, classArray, campArray, rarityArray, bannerArray, emblemArray, miniEmblemArray } from './array.js';
+  import { typeArray, classArray, campArray, rarityArray, bannerArray, emblemArray, miniEmblemArray } from './array.json';
 
   const result = ref();
 
@@ -53,12 +53,15 @@
         })
 
   const isMobile = ref(false),
-        isPreviewed = ref(false);
+        isPreviewed = ref(false),
+        customEmblems = ref([]);
 
-  onMounted(() => {
+  onMounted(async () => {
     if(window.innerWidth < 1200){
       isMobile.value = true;
     }
+    await openDB();
+    customEmblems.value = await getCustomEmblems();
   })
 
   window.addEventListener("resize", () => {
@@ -187,16 +190,29 @@
   )
 
   function getNameByVal(val, arr){
-    return arr.find(item => item.value === val).name;
+    const item = arr.find(item => item.value === val);
+    if (item) {
+      return item.name;
+    }
+    // 检查是否是自定义 emblem
+    const customItem = customEmblems.value.find(item => item.id === val);
+    if (customItem) {
+      return customItem.name;
+    }
+    return "无";
   }
 
   //改变下拉选择框展开、收起状态
-  function dropOption(val){
+  async function dropOption(val){
     isOpened[val] = !isOpened[val];
     for(let i in isOpened){
       if(i !== val){
         isOpened[i] = false;
       }
+    }
+    // 当展开 emblem 选择框时刷新自定义 emblem 列表
+    if (val === 'emblem' && isOpened[val]) {
+      await refreshCustomEmblems();
     }
   }
 
@@ -256,6 +272,58 @@
   function saveCard(){
     if(result.value){
       result.value.saveResult();
+    }
+  }
+
+  const dbInstance = ref(null);
+  function openDB(){
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("customResource", 1);
+    
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if(!db.objectStoreNames.contains("emblems")){
+        const emblemStore = db.createObjectStore("emblems", {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+        emblemStore.createIndex("name", "name", {unique: true});
+      }
+    }
+
+    request.onsuccess = (event) => {
+      const db = event.target.result;
+      dbInstance.value = db;
+      resolve(db);
+    }
+    request.onerror = (event) => {
+      reject(event.target.error);
+    }
+  })
+}
+
+  async function getCustomEmblems(){  
+    if(!dbInstance.value){
+      return [];
+    }
+    return new Promise((resolve, reject) => {
+      const transaction = dbInstance.value.transaction("emblems", "readonly");
+      const emblemStore = transaction.objectStore("emblems");
+      const request = emblemStore.getAll();
+      request.onsuccess = (event) => {
+        const emblems = event.target.result || [];
+        resolve(emblems);
+      }
+      request.onerror = (event) => {
+        reject(event.target.error);
+      }
+    })
+  }
+
+  // 刷新自定义 emblem 列表
+  async function refreshCustomEmblems() {
+    if (dbInstance.value) {
+      customEmblems.value = await getCustomEmblems();
     }
   }
 </script>
@@ -632,6 +700,16 @@
                 <input type="radio"
                         name="emblem" 
                         :value="item.value" 
+                        v-model="chosen.emblem" 
+                        @click="dropOption('emblem')">
+              </label>
+            </li>
+            <li v-for="item in customEmblems">
+              <label>
+                {{ item.name }}
+                <input type="radio"
+                        name="emblem"
+                        :value="item.id"
                         v-model="chosen.emblem" 
                         @click="dropOption('emblem')">
               </label>

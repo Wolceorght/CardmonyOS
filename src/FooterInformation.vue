@@ -159,7 +159,6 @@ import { onBeforeMount, ref } from 'vue';
   }
 
   #info-box{
-    width: 1200px;
     margin: .5em auto 1em auto;
     padding-right: 2em;
     box-sizing: border-box;
@@ -326,6 +325,7 @@ import { onBeforeMount, ref } from 'vue';
 
   @media (max-width: 1200px) {
     #info-box{
+      margin-top: 0;
       width: 100%;
       max-width: 750px;
       text-align: center;

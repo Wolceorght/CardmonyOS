@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import FooterInformation from './FooterInfomation.vue'
+import FooterInformation from './FooterInformation.vue'
+import CustomResource from './CustomResource.vue'
 
 createApp(App).mount('#app')
-createApp(FooterInformation).mount('#footer')
+createApp(CustomResource).mount('#customResource')
+createApp(FooterInformation).mount('#footerInformation')

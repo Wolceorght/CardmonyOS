@@ -201,6 +201,40 @@
     //return img.value.find(item => item.name === val).element;
   }
 
+  // 从 IndexedDB 获取自定义 emblem
+  async function getCustomEmblem(id){
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open("customResource", 1);
+      
+      request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction("emblems", "readonly");
+        const emblemStore = transaction.objectStore("emblems");
+        const getRequest = emblemStore.get(parseInt(id));
+        
+        getRequest.onsuccess = (event) => {
+          const emblem = event.target.result;
+          if (emblem) {
+            const imgElement = new Image();
+            imgElement.onload = () => resolve(imgElement);
+            imgElement.onerror = reject;
+            imgElement.src = URL.createObjectURL(emblem.imgBlob);
+          } else {
+            reject(new Error("Emblem not found"));
+          }
+        };
+        
+        getRequest.onerror = (event) => {
+          reject(event.target.error);
+        };
+      };
+      
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
+    });
+  }
+
   async function drawEmblem(ra, ena, cho){
     const c1 = document.createElement("canvas"),
           c2 = document.createElement("canvas");
@@ -211,7 +245,15 @@
     let y = (ra !== "" && (cho.type === "minion" || cho.type === "spell")) ? -10 : 0;
     let dx, dy, scale;
 
-    const emblem = ena.mini ? await getImg(`emblem-${cho.emblem}-mini`) : await getImg(`emblem-${cho.emblem}`);
+    // 检查是否是自定义 emblem（id 是数字）
+    let emblem;
+    if (!isNaN(parseInt(cho.emblem))) {
+      // 自定义 emblem
+      emblem = await getCustomEmblem(cho.emblem);
+    } else {
+      // 默认 emblem
+      emblem = ena.mini ? await getImg(`emblem-${cho.emblem}-mini`) : await getImg(`emblem-${cho.emblem}`);
+    }
 
     switch(cho.type){
       case "minion":
