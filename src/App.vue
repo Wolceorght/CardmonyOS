@@ -704,6 +704,7 @@
                         @click="dropOption('emblem')">
               </label>
             </li>
+            <li class="divider">　</li>
             <li v-for="item in customEmblems">
               <label>
                 {{ item.name }}
@@ -1051,9 +1052,18 @@
   .rarity .option.open ul,
   .emblem .option.open ul{
     max-height: 15em;
-  }
+  }  
   .banner .option.open ul{
     max-height: 9em;
+  }
+
+  .divider{
+    display: none;
+  }
+  .divider:not(:last-child){
+    display: block;
+    height: 1px;
+    background-color: var(--border-color);
   }
 
   .option li{

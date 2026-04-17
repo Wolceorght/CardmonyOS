@@ -42,6 +42,12 @@ import { onBeforeMount, ref } from 'vue';
       log: [
         "水印更新"
       ]
+    },{
+      generation: "CardmonyOS",
+      name: "1.2",
+      log: [
+        "添加了自定义系列水印功能"
+      ]
     },
   ]
   

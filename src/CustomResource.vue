@@ -56,45 +56,95 @@ function uploadEmblem(){
 }
 
 function saveEmblem(){
-    try{
-      if(emblemImgUrl.value === ""){
-        throw "缺少素材";
-      }
-      if(emblemName.value === ""){
-        throw "缺少系列名称";
-      }
-
-      const c = document.createElement("canvas");
-      const ctx = c.getContext("2d");
-      c.width = 540;
-      c.height = 670;
-      
-      const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(img, 278 - img.width / 2, 526.5 - img.height / 2, img.width, img.height);
-        c.toBlob((blob) => {
-          addEmblemToDB(emblemName.value, blob);
-        })
-      }
-      img.src = emblemImgUrl.value;
+  try{
+    if(emblemImgUrl.value === ""){
+      throw "缺少素材";
     }
-    catch(err){
-      console.error(err);
-      if(err === "缺少素材"){
-        const subtitle = document.querySelector(".custom-subtitle:last-child h2");
-        subtitle.classList.add("error");
-        setTimeout(() => {
-          subtitle.classList.remove("error");
-        }, 1200);
-      } else if(err === "缺少系列名称"){
-        const subtitle = document.querySelector(".custom-subtitle:first-child h2");
-        subtitle.classList.add("error");
-        setTimeout(() => {
-          subtitle.classList.remove("error");
-        }, 1200);
-      }
+    if(emblemName.value === ""){
+      throw "缺少系列名称";
+    }
+
+    const c = document.createElement("canvas");
+    const ctx = c.getContext("2d");
+    c.width = 540;
+    c.height = 670;
+    
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, 278 - img.width / 2, 526.5 - img.height / 2, img.width, img.height);
+      c.toBlob((blob) => {
+        addEmblemToDB(emblemName.value, blob);
+      })
+    }
+    img.src = emblemImgUrl.value;
+  }
+  catch(err){
+    console.error(err);
+    if(err === "缺少素材"){
+      const subtitle = document.querySelector(".custom-input .custom-subtitle:last-child h2");
+      subtitle.classList.add("error");
+      setTimeout(() => {
+        subtitle.classList.remove("error");
+      }, 1200);
+    } else if(err === "缺少系列名称"){
+      const subtitle = document.querySelector(".custom-input .custom-subtitle:first-child h2");
+      subtitle.classList.add("error");
+      setTimeout(() => {
+        subtitle.classList.remove("error");
+      }, 1200);
     }
   }
+}
+
+function deleteEmblem(){
+  try{
+    if(emblemName.value === ""){
+      throw "缺少系列名称";
+    }
+    const transaction = dbInstance.value.transaction("emblems", "readwrite");
+    const emblemStore = transaction.objectStore("emblems");
+    const nameIndex = emblemStore.index("name");
+    const getRequest = nameIndex.get(emblemName.value);
+    
+    getRequest.onsuccess = (event) => {
+      const emblem = event.target.result;
+      if (emblem) {
+        const deleteRequest = emblemStore.delete(emblem.id);
+        deleteRequest.onsuccess = () => {
+          alert("已删除");
+          emblemName.value = "";
+          emblemImgUrl.value = "";
+          emblemImageName.value = "选择图片...";
+          classImageName.value = "选择图片...";
+        };
+        deleteRequest.onerror = () => {
+          alert("删除失败");
+        };
+      } else {
+        const subtitle = document.querySelector(".custom-input .custom-subtitle:first-child h2");
+        subtitle.classList.add("error");
+        subtitle.textContent = "系列名称不存在";
+        setTimeout(() => {
+          subtitle.classList.remove("error");
+          subtitle.textContent = "系列名称";
+        }, 1200);
+      }
+    };
+    getRequest.onerror = () => {
+      alert("查询失败");
+    };
+
+  } catch(err){
+    console.error(err);
+    if(err === "缺少系列名称"){
+      const subtitle = document.querySelector(".custom-input .custom-subtitle:first-child h2");
+      subtitle.classList.add("error");
+      setTimeout(() => {
+        subtitle.classList.remove("error");
+      }, 1200);
+    }
+  }
+}
 
 const dbInstance = ref(null);
 
@@ -203,7 +253,7 @@ function addEmblemToDB(name, imgBlob){
               </label>
             </div>
             <div class="instruction">
-              请上传不大于 <b>165px x 165px</b> 的<b>透明背景</b>、<b>PNG </b>格式图片，具体样式参见下图。
+              请上传不大于 <b>165 x 165 px</b> 的<b>透明背景</b>、<b>PNG </b>格式图片，具体样式参见下图。
             </div>
             <div class="example-box">
               <div style="margin-top: 2em; text-align: center;">
@@ -215,8 +265,11 @@ function addEmblemToDB(name, imgBlob){
                 <h2>预览</h2>
                 <img :src="emblemImgUrl" style="max-width: 165px; max-height: 165px; object-fit: contain;">
               </div>
+              
+              <div class="br"></div>
 
-              <div v-if="emblemImgUrl" class="button-container">
+              <div class="button-container">
+              <div class="submit-button" @click="deleteEmblem()">删除</div>
                 <div class="submit-button" @click="saveEmblem()">保存<span style="transform: translate(.15em, 0) rotate(15deg);">!</span></div>
               </div>
             </div>
@@ -243,7 +296,7 @@ function addEmblemToDB(name, imgBlob){
   }
   #custom-button-box{
     margin: .5em auto 1em auto;
-    padding-left: 2em;
+    padding-left: 2.5em;
     box-sizing: border-box;
     font-weight: 500;
     text-align: left;
@@ -256,7 +309,10 @@ function addEmblemToDB(name, imgBlob){
     cursor: pointer;
     transition: all .2s ease;
   }
-
+  #custom-button::after{
+    content: " New";
+    color: var(--harmony-blue);
+  }
 
   #custom-container{
     width: 100%;
@@ -405,9 +461,17 @@ function addEmblemToDB(name, imgBlob){
     align-items: center;
   }
 
+  .br{
+    width: 100%;
+    display: none;
+  }
+
   .button-container{
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    padding-top: 2em;
+    gap: 0;
   }
 
   .submit-button{
@@ -472,6 +536,29 @@ function addEmblemToDB(name, imgBlob){
     #custom-frame{
       display: none;
     }
+    
+    #custom-emblem{
+      width: 100%;
+    }
+    .example-box{
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .br{
+      display: block;
+    }
+    .button-container{
+      padding-top: 0;
+      flex-direction: row;
+      gap: 2em;
+    }
+    .submit-button{
+      margin-top: .5em;
+    }
+
+    #custom-class{
+      display: none;
+    }
   }
 
   @media (hover: hover) {
@@ -481,11 +568,7 @@ function addEmblemToDB(name, imgBlob){
     }
 
     .input-box input:hover, .image-box label:hover{
-    background-color: var(--hover-color);
-  }
-    
-    #custom-button-box a:hover{
-      color: var(--shape-color);
+      background-color: var(--hover-color);
     }
 
     #custom-button-box #custom-button:hover{
