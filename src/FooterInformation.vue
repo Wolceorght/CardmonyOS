@@ -48,6 +48,12 @@ import { onBeforeMount, ref } from 'vue';
       log: [
         "添加了自定义系列水印功能"
       ]
+    },{
+      generation: "CardmonyOS",
+      name: "1.2.1",
+      log: [
+        "更改加粗方案，修复了 Safari 浏览器下加粗不生效的问题"
+      ]
     },
   ]
   
