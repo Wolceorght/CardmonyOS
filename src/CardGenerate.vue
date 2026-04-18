@@ -814,15 +814,12 @@
     }
     boldText.forEach(element => {
       element.style.fontWeight = "400";
-      let strokeWidth = ".05em";
       /*
-      const userAgent = navigator.userAgent;
-      if(userAgent.indexOf("Firefox") !== -1){
-        strokeWidth = ".02em";
-      }
-      */
+      let strokeWidth = ".05em";
       element.style.textShadow = `0 0 ${strokeWidth} ${color},
                                   0 0 ${strokeWidth} ${color}`;
+      */
+      element.style.fontWeight = "bold";
     })
     
     textBox.style.overflow = "hidden";
