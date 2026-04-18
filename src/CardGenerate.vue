@@ -806,6 +806,8 @@
     const textContent = document.createElement("p");
     textContent.innerHTML = te;
 
+    textContent.style.fontWeight = "400";
+
     const boldText = textContent.querySelectorAll("b");
     if(type === "weapon"){
       color = "#ddd";
