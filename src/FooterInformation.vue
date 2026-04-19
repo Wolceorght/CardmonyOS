@@ -52,16 +52,23 @@ import { onBeforeMount, ref } from 'vue';
       generation: "CardmonyOS",
       name: "1.2.1",
       log: [
-        "更改加粗方案，修复了 Safari 浏览器下加粗不生效的问题"
+        "修复了 Safari 浏览器下加粗不生效的问题"
       ]
-    },
+    },{
+      generation: "CardmonyOS",
+      name: "1.2.2",
+      log: [
+        "为「多职业阵营」添加了「无」选项，现在可以不指定阵营地使用多职业飘带了",
+        "在页面底部添加了反馈群入口，欢迎加入分享反馈和建议"
+      ]
+    }
   ]
   
   onBeforeMount(() => {
     versionInfo.reverse();
     versionInfo.forEach((item) => {
       item.log = item.log.map((logItem) => 
-        logItem.replace(/^(修复|优化|添加|移除)/, "<b>$1</b>")
+        logItem.replace(/(修复|优化|添加|移除)/, "<b>$1</b>")
       )
     })
   })
@@ -104,6 +111,10 @@ import { onBeforeMount, ref } from 'vue';
       <span class="vertical-bar">|</span>
       <a href="https://github.com/Wolceorght/CardmonyOS">
         GitHub
+      </a>
+      <span class="vertical-bar">|</span>
+      <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=mestg42%2FaLEfITqBGiOhiSql8V3UePQHyT9%2Fp%2FmNt%2BzRAUUafC4SXmVGr4OB842V&busi_data=eyJncm91cENvZGUiOiIxMDk3MTU1MTk1IiwidG9rZW4iOiIwM05EcG9wZU13LzlTN1orbFFvTW1Oby9RK3hFOXhWZlFHbSt0RWU1ZWhDdGpyVVJlZTZQRnZscnc3THZwWCt2IiwidWluIjoiMzE1NzM5NDc2In0%3D&data=3c_UxdQVs-45Dyw8H-DDK5336WpMFpgmr7Yi5Tzzv-xVruVuJqK7951XNbMOBvKi0d_wVpMMklneZTxriaN_Hg&svctype=4&tempid=h5_group_info">
+        反馈群
       </a>
     </div>
   </div>

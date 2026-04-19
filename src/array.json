@@ -77,6 +77,10 @@
   ],
   "campArray": [
     {
+      "value": "none",
+      "name": "无"
+    },
+    {
       "value": "goons",
       "name": "污手党"
     },

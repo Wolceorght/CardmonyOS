@@ -46,7 +46,7 @@
           type: "minion",
           class: "neutral",
           secondClass: "dk",
-          multiClass: "goons",
+          multiClass: "none",
           rarity: "free",
           banner: "none",
           emblem: "none"
