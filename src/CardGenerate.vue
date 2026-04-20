@@ -1382,7 +1382,7 @@
             my = e.clientY - i.value.getBoundingClientRect().top;
 
       const newScale = e.deltaY < 0 ? scale * 1.1 : scale / 1.1;
-      if(newScale < 0.1 || newScale > 5) return;
+      if(newScale < 0.05 || newScale > 5) return;
 
       const factor = newScale / scale;
       offset.x = mx - factor * (mx - offset.x);
