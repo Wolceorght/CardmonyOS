@@ -65,8 +65,9 @@ import { onBeforeMount, ref } from 'vue';
       generation: "CardmonyOS",
       name: "1.2.3",
       log: [
-        "修复了 Safari 浏览器下随从类型 / 法术派系的显示问题",
-        "优化了插画的缩放尺寸范围"
+        "优化了卡牌渲染性能",
+        "优化了插画的缩放尺寸范围",
+        "修复了 Safari 浏览器下随从类型 / 法术派系的显示问题"
       ]
     }
   ]

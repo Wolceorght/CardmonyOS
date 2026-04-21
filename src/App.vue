@@ -57,20 +57,28 @@
         customEmblems = ref([]);
 
   onMounted(async () => {
-    if(window.innerWidth < 1200){
-      isMobile.value = true;
-    }
+    // 初始化时检测屏幕尺寸
+    updateIsMobile();
+    // 初始化数据库
     await openDB();
     customEmblems.value = await getCustomEmblems();
+    // 添加防抖的 resize 事件监听
+    window.addEventListener("resize", debounce(updateIsMobile, 200));
   })
 
-  window.addEventListener("resize", () => {
-    if(window.innerWidth < 1200){
-      isMobile.value = true;
-    } else{
-      isMobile.value = false;
-    }
-  })
+  // 防抖函数
+  function debounce(func, wait) {
+    let timeout;
+    return function() {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, arguments), wait);
+    };
+  }
+
+  // 更新 isMobile 状态
+  function updateIsMobile() {
+    isMobile.value = window.innerWidth < 1200;
+  }
 
   function previewCard(){
     if(isMobile.value){
@@ -228,15 +236,21 @@
     }
   }
 
+  // 文本域引用
+  const textAreaRef = ref(null);
+
   //在选中文本两端添加 bold/italic 标签
   function fontStyle(t){
-    let textArea = document.getElementsByName("text")[0];
-    if(typeof(textArea.selectionStart) != "undefined"){
+    const textArea = textAreaRef.value;
+    if(textArea && typeof(textArea.selectionStart) != "undefined"){
       let p1 = textArea.value.substr(0, textArea.selectionStart);
       let p2 = textArea.value.substr(textArea.selectionStart, textArea.selectionEnd - textArea.selectionStart);
       let p3 = textArea.value.substr(textArea.selectionEnd);
       textArea.value = `${p1}<${t}>${p2}</${t}>${p3}`;
       text.value = textArea.value;
+      // 重新聚焦文本域并恢复选择范围
+      textArea.focus();
+      textArea.setSelectionRange(p1.length + t.length + 1, p1.length + t.length + 1 + p2.length);
     }
   }
 
@@ -536,7 +550,8 @@
         <button @click="fontStyle('i')">𝐼</button>
       </div>
       <div class="text-box">
-        <textarea name="text"
+        <textarea ref="textAreaRef"
+                  name="text"
                   placeholder="<b>潜行</b>。每当本随从攻击时，随机将一张<i>（你对手职业的）</i>牌置入你的手牌。"
                   autocomplete="off"
                   v-model="text">

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const emblemName = ref("");
 
@@ -8,50 +8,76 @@ const emblemImageName = ref("选择图片..."),
 
 const isCustomDisplaying = ref(false);
 const firstDisplay = ref(true);
+
+// 使用 ref 引用 DOM 元素
+const customContainer = ref(null);
+const emblemImageInput = ref(null);
+const emblemLabel = ref(null);
+const seriesNameSubtitle = ref(null);
+const materialSubtitle = ref(null);
+
+// 缓存样式值
+let rootComputed = null;
+
+onMounted(() => {
+  // 初始化时获取样式
+  const root = document.documentElement;
+  rootComputed = getComputedStyle(root);
+});
+
 function displayCustom(){
-  const container = document.getElementById("custom-container");
   isCustomDisplaying.value = !isCustomDisplaying.value;
-    if(isCustomDisplaying.value){
-      container.style.maxHeight = "100dvh";
-      document.body.style.overflow = "hidden";
-    } else if(!isCustomDisplaying.value){
-      container.style.maxHeight = "0";
-      document.body.style.overflow = "auto";
-    }
-    if(firstDisplay.value){
-      openDB();
-      firstDisplay.value = false;
-    }
+  if(isCustomDisplaying.value){
+    customContainer.value.style.maxHeight = "100dvh";
+    document.body.style.overflow = "hidden";
+  } else {
+    customContainer.value.style.maxHeight = "0";
+    document.body.style.overflow = "auto";
+  }
+  if(firstDisplay.value){
+    openDB();
+    firstDisplay.value = false;
+  }
 }
 
 const emblemImgUrl = ref("");
 function uploadEmblem(){
-  URL.revokeObjectURL(emblemImgUrl.value);
-    
-  const file = document.getElementsByName("emblem-image")[0].files[0];
-  const emblemLbl = document.getElementById("emblem-label");
-
-  const root = document.documentElement;
-  let rootComputed = getComputedStyle(root);
-
-  if(file !== "" && file.type.startsWith("image/png")){
+  // 清理之前的 URL
+  if (emblemImgUrl.value) {
+    URL.revokeObjectURL(emblemImgUrl.value);
+    emblemImgUrl.value = "";
+  }
+  
+  const file = emblemImageInput.value?.files[0];
+  
+  if(file && file.type.startsWith("image/png")){
     const img = new Image();
     img.onload = function() {
       if (img.width > 165 || img.height > 165) {
-        emblemImgUrl.value = "";
         emblemImageName.value = "图片无效...";
-        emblemLbl.style.color = rootComputed.getPropertyValue("--disabled-color");
+        if (emblemLabel.value) {
+          emblemLabel.value.style.color = rootComputed.getPropertyValue("--disabled-color");
+        }
       } else {
         emblemImgUrl.value = URL.createObjectURL(file);
         emblemImageName.value = file.name;
-        emblemLbl.style.color = rootComputed.getPropertyValue("--shape-color");
+        if (emblemLabel.value) {
+          emblemLabel.value.style.color = rootComputed.getPropertyValue("--shape-color");
+        }
+      }
+    };
+    img.onerror = function() {
+      emblemImageName.value = "图片无效...";
+      if (emblemLabel.value) {
+        emblemLabel.value.style.color = rootComputed.getPropertyValue("--disabled-color");
       }
     };
     img.src = URL.createObjectURL(file);
   } else{
-    emblemImgUrl.value = "";
     emblemImageName.value = "图片无效...";
-    emblemLbl.style.color = rootComputed.getPropertyValue("--disabled-color");
+    if (emblemLabel.value) {
+      emblemLabel.value.style.color = rootComputed.getPropertyValue("--disabled-color");
+    }
   }
 }
 
@@ -75,23 +101,29 @@ function saveEmblem(){
       c.toBlob((blob) => {
         addEmblemToDB(emblemName.value, blob);
       })
-    }
+    };
+    img.onerror = () => {
+      console.error("图片加载失败");
+      alert("图片加载失败，请重试");
+    };
     img.src = emblemImgUrl.value;
   }
   catch(err){
     console.error(err);
     if(err === "缺少素材"){
-      const subtitle = document.querySelector(".custom-input .custom-subtitle:last-child h2");
-      subtitle.classList.add("error");
-      setTimeout(() => {
-        subtitle.classList.remove("error");
-      }, 1200);
+      if (materialSubtitle.value) {
+        materialSubtitle.value.classList.add("error");
+        setTimeout(() => {
+          materialSubtitle.value.classList.remove("error");
+        }, 1200);
+      }
     } else if(err === "缺少系列名称"){
-      const subtitle = document.querySelector(".custom-input .custom-subtitle:first-child h2");
-      subtitle.classList.add("error");
-      setTimeout(() => {
-        subtitle.classList.remove("error");
-      }, 1200);
+      if (seriesNameSubtitle.value) {
+        seriesNameSubtitle.value.classList.add("error");
+        setTimeout(() => {
+          seriesNameSubtitle.value.classList.remove("error");
+        }, 1200);
+      }
     }
   }
 }
@@ -101,6 +133,12 @@ function deleteEmblem(){
     if(emblemName.value === ""){
       throw "缺少系列名称";
     }
+    
+    if (!dbInstance.value) {
+      alert("数据库未初始化");
+      return;
+    }
+    
     const transaction = dbInstance.value.transaction("emblems", "readwrite");
     const emblemStore = transaction.objectStore("emblems");
     const nameIndex = emblemStore.index("name");
@@ -112,22 +150,21 @@ function deleteEmblem(){
         const deleteRequest = emblemStore.delete(emblem.id);
         deleteRequest.onsuccess = () => {
           alert("已删除");
-          emblemName.value = "";
-          emblemImgUrl.value = "";
-          emblemImageName.value = "选择图片...";
-          classImageName.value = "选择图片...";
+          // 重置表单
+          resetForm();
         };
         deleteRequest.onerror = () => {
           alert("删除失败");
         };
       } else {
-        const subtitle = document.querySelector(".custom-input .custom-subtitle:first-child h2");
-        subtitle.classList.add("error");
-        subtitle.textContent = "系列名称不存在";
-        setTimeout(() => {
-          subtitle.classList.remove("error");
-          subtitle.textContent = "系列名称";
-        }, 1200);
+        if (seriesNameSubtitle.value) {
+          seriesNameSubtitle.value.classList.add("error");
+          seriesNameSubtitle.value.textContent = "系列名称不存在";
+          setTimeout(() => {
+            seriesNameSubtitle.value.classList.remove("error");
+            seriesNameSubtitle.value.textContent = "系列名称";
+          }, 1200);
+        }
       }
     };
     getRequest.onerror = () => {
@@ -137,12 +174,27 @@ function deleteEmblem(){
   } catch(err){
     console.error(err);
     if(err === "缺少系列名称"){
-      const subtitle = document.querySelector(".custom-input .custom-subtitle:first-child h2");
-      subtitle.classList.add("error");
-      setTimeout(() => {
-        subtitle.classList.remove("error");
-      }, 1200);
+      if (seriesNameSubtitle.value) {
+        seriesNameSubtitle.value.classList.add("error");
+        setTimeout(() => {
+          seriesNameSubtitle.value.classList.remove("error");
+        }, 1200);
+      }
     }
+  }
+}
+
+// 重置表单函数
+function resetForm() {
+  emblemName.value = "";
+  if (emblemImgUrl.value) {
+    URL.revokeObjectURL(emblemImgUrl.value);
+    emblemImgUrl.value = "";
+  }
+  emblemImageName.value = "选择图片...";
+  classImageName.value = "选择图片...";
+  if (emblemLabel.value) {
+    emblemLabel.value.style.color = rootComputed.getPropertyValue("--disabled-color");
   }
 }
 
@@ -185,11 +237,8 @@ function addEmblemToDB(name, imgBlob){
   const request = emblemStore.add(record);
   request.onsuccess = () => {
     alert("已保存");
-
-    emblemName.value = "";
-    emblemImgUrl.value = "";
-    emblemImageName.value = "选择图片...";
-    classImageName.value = "选择图片...";
+    // 使用resetForm函数重置表单
+    resetForm();
   }
   request.onerror = (event) => {
     console.error(event.target.error);
@@ -208,7 +257,7 @@ function addEmblemToDB(name, imgBlob){
     </div>
   </div>
 
-  <div id="custom-container">
+  <div id="custom-container" ref="customContainer">
     <div id="custom-box">
       <div id="custom-frame">
         <svg width="32" height="32" style="position: absolute; top: -16px; left: -16px" xmlns="http://www.w3.org/2000/svg">
@@ -233,7 +282,7 @@ function addEmblemToDB(name, imgBlob){
           <div class="custom-midtitle"><h1>自定义系列水印</h1></div>
           
           <div class="custom-input">
-            <div class="custom-subtitle"><h2>系列名称</h2></div>
+            <div class="custom-subtitle"><h2 ref="seriesNameSubtitle">系列名称</h2></div>
             <div class="input-box">
               <div>
                 <input type="text" 
@@ -242,11 +291,12 @@ function addEmblemToDB(name, imgBlob){
                       placeholder="系列名称">
               </div>
             </div>
-            <div class="custom-subtitle"><h2>水印素材</h2></div>
+            <div class="custom-subtitle"><h2 ref="materialSubtitle">水印素材</h2></div>
             <div class="image-box">
-              <label id="emblem-label">
+              <label id="emblem-label" ref="emblemLabel">
                 {{ emblemImageName }}
                 <input type="file" 
+                      ref="emblemImageInput"
                       name="emblem-image"
                       accept="image/png"
                       @change="uploadEmblem()">

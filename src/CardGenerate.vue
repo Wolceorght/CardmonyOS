@@ -33,21 +33,16 @@
         width = ref(''),
         height = ref('');
   
+  // 防抖函数
+  function debounce(func, wait) {
+    let timeout;
+    return function() {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, arguments), wait);
+    };
+  }
+
   onMounted(() => {
-    /*
-    //强制加载 canvas 使用的字体
-    const nameFont = new FontFace("AR LisuGB Medium", "url(/font/ARLisuGB-Medium.woff2)", {display: "block"});
-    const textFont = new FontFace("BlizzardGlobal", "url(/font/BlizzardGlobal.woff2)", {display: "block"});
-    document.fonts.add(nameFont);
-    document.fonts.add(textFont);
-    nameFont.load();
-    textFont.load();
-    
-    document.fonts.ready.then(() => {
-      fontLoaded.value = true;
-    })
-    */
-    
     f.value = document.getElementById("card"),
     t.value = document.getElementById("text"),
     i.value = document.getElementById("illustration");
@@ -68,33 +63,37 @@
 
     //禁用插画图层右键
     i.value.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-  })
+      e.preventDefault();
+    })
   })
 
   let oldIsPreviewed = null;
+  
+  // 防抖处理的绘制函数
+  const debouncedDraw = debounce(async () => {
+    if(loaded.value && fctx.value !== null && tctx.value !== null){
+      await drawFrame(props.attack, 
+                      props.health, 
+                      props.rune, 
+                      props.race,
+                      props.secondRace, 
+                      props.isEnabled, 
+                      props.chosen);
+      await drawTexts(props.name, 
+                      props.cost, 
+                      props.attack, 
+                      props.health,
+                      props.text,
+                      props.race,
+                      props.secondRace,
+                      props.chosen);
+    }
+  }, 100);
+
   watch(  
     [props, loaded], (newVal) => {
       if(oldIsPreviewed === null || oldIsPreviewed === newVal[0].isPreviewed){
-        if(loaded.value && fctx.value !== null && tctx.value !== null){
-          setTimeout(() => {
-            drawFrame(props.attack, 
-                    props.health, 
-                    props.rune, 
-                    props.race,
-                    props.secondRace, 
-                    props.isEnabled, 
-                    props.chosen);
-            drawTexts(props.name, 
-                    props.cost, 
-                    props.attack, 
-                    props.health,
-                    props.text,
-                    props.race,
-                    props.secondRace,
-                    props.chosen);
-          }, 1)
-        }
+        debouncedDraw();
       }
       oldIsPreviewed = newVal[0].isPreviewed;
     },
@@ -171,38 +170,59 @@
   //导入图片
   const imgModule = import.meta.glob("@/assets/img/*.png");
   const img = ref([]);
+  const imgLoadingPromises = {};
 
   async function getImg(val){
+    // 检查是否已加载
     const loadedImg = img.value.find((obj) => obj.name === val);
     if(loadedImg){
       return loadedImg.element;
     }
 
-    for(let path in imgModule){
-      let imgName = path.match(/([^/]*?)\.[^/.]+$/)[1];
-      if(imgName === val){
-        let imgElement = new Image();
-        const module = await imgModule[path]();
-        const imgUrl = module.default;
-
-        await new Promise((resolve, reject) => {
-          imgElement.onload = resolve;
-          imgElement.onerror = reject;
-          imgElement.src = imgUrl;
-        });
-
-        img.value.push({
-          name: imgName,
-          element: imgElement
-        })
-        return imgElement;
-      }
+    // 检查是否正在加载
+    if(imgLoadingPromises[val]){
+      return imgLoadingPromises[val];
     }
-    //return img.value.find(item => item.name === val).element;
+
+    // 开始加载
+    imgLoadingPromises[val] = (async () => {
+      for(let path in imgModule){
+        let imgName = path.match(/([^/]*?)\.[^/.]+$/)[1];
+        if(imgName === val){
+          let imgElement = new Image();
+          const module = await imgModule[path]();
+          const imgUrl = module.default;
+
+          await new Promise((resolve, reject) => {
+            imgElement.onload = resolve;
+            imgElement.onerror = reject;
+            imgElement.src = imgUrl;
+          });
+
+          img.value.push({
+            name: imgName,
+            element: imgElement
+          });
+          
+          // 清除加载中标记
+          delete imgLoadingPromises[val];
+          return imgElement;
+        }
+      }
+    })();
+
+    return imgLoadingPromises[val];
   }
 
   // 从 IndexedDB 获取自定义 emblem
+  const customEmblemCache = {};
+  
   async function getCustomEmblem(id){
+    // 检查缓存
+    if(customEmblemCache[id]){
+      return customEmblemCache[id];
+    }
+
     return new Promise((resolve, reject) => {
       const request = indexedDB.open("customResource", 1);
       
@@ -216,7 +236,11 @@
           const emblem = event.target.result;
           if (emblem) {
             const imgElement = new Image();
-            imgElement.onload = () => resolve(imgElement);
+            imgElement.onload = () => {
+              // 缓存结果
+              customEmblemCache[id] = imgElement;
+              resolve(imgElement);
+            };
             imgElement.onerror = reject;
             imgElement.src = URL.createObjectURL(emblem.imgBlob);
           } else {
