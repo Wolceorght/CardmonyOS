@@ -1,0 +1,79 @@
+{
+  "versionInfo": [
+    {
+      "generation": "Beta",
+      "name": "0.9",
+      "log": [
+        "小范围测试"
+      ]
+    },{
+      "generation": "Beta",
+      "name": "0.9.1",
+      "log": [
+        "修复了桌面端无法调整插画尺寸的问题",
+        "优化了移动端调整插画尺寸的体验",
+        "优化了移动端的表单布局"
+      ]
+    },{
+      "generation": "CardmonyOS",
+      "name": "1.0",
+      "log": [
+        "CardmonyOS：没有限制、无须等待、完全免费的《炉石传说》卡牌制作工具",
+        "添加了版本日志"
+      ]
+    },{
+      "generation": "CardmonyOS",
+      "name": "1.0.1",
+      "log": [
+        "水印更新"
+      ]
+    },{
+      "generation": "CardmonyOS",
+      "name": "1.1",
+      "log": [
+        "添加了「文字稿」功能：有史以来最便捷的卡牌制作方式",
+        "添加了深色模式",
+        "修复了第一次输入表单时卡牌预览不更新的问题"
+      ]
+    },{
+      "generation": "CardmonyOS",
+      "name": "1.1.1",
+      "log": [
+        "水印更新"
+      ]
+    },{
+      "generation": "CardmonyOS",
+      "name": "1.2",
+      "log": [
+        "添加了自定义系列水印功能"
+      ]
+    },{
+      "generation": "CardmonyOS",
+      "name": "1.2.1",
+      "log": [
+        "修复了 Safari 浏览器下加粗不生效的问题"
+      ]
+    },{
+      "generation": "CardmonyOS",
+      "name": "1.2.2",
+      "log": [
+        "为「多职业阵营」添加了「无」选项，现在可以不指定阵营地使用多职业飘带了",
+        "在页面底部添加了反馈群入口，欢迎加入分享反馈和建议"
+      ]
+    },{
+      "generation": "CardmonyOS",
+      "name": "1.2.3",
+      "log": [
+        "优化了卡牌渲染性能",
+        "优化了插画的缩放尺寸范围",
+        "修复了 Safari 浏览器下随从类型 / 法术派系的显示问题"
+      ]
+    },{
+      "generation": "CardmonyOS",
+      "name": "1.2.4",
+      "log": [
+        "优化了用户界面"
+      ]
+    }
+  ]
+}

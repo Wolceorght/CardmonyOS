@@ -1258,50 +1258,38 @@
     tctx.value.lineWidth = 4.5;
 
     const userAgent = navigator.userAgent;
+    const isSafari = userAgent.includes("Safari");
 
       if(ra !== "" && secRa !== ""){
         tctx.value.lineWidth = 3.2;
         tctx.value.font = `26px 'AR LisuGB Medium'`;
-        if(userAgent.includes("Safari")){
-          tctx.value.strokeText(ra, 276.5, 601);
-          tctx.value.fillText(ra, 276.9, 600.3);
-        } else{
-          tctx.value.strokeText(ra, 276.9, 600.3);
-          tctx.value.fillText(ra, 276.9, 600.3);
+        tctx.value.strokeText(ra, 276.9, 600.3);
+        tctx.value.fillText(ra, 276.9, 600.3);
+        if(!isSafari){
           tctx.value.lineWidth = .2;
           tctx.value.strokeText(ra, 276.9, 600.3);
         }
-        if(userAgent.includes("Safari")){
-          tctx.value.strokeText(secRa, 276.5, 624);
-          tctx.value.fillText(secRa, 276.9, 623.3);
-        } else{
-          tctx.value.lineWidth = 3.2;
-          tctx.value.strokeText(secRa, 276.9, 623.3);
-          tctx.value.fillText(secRa, 276.9, 623.3);
+        tctx.value.lineWidth = 3.2;
+        tctx.value.strokeText(secRa, 276.9, 623.3);
+        tctx.value.fillText(secRa, 276.9, 623.3);
+        if(!isSafari){
           tctx.value.lineWidth = .2;
           tctx.value.strokeText(secRa, 276.9, 623.3);
         }
       } else if(ra !== ""){
         if(type === "minion"){
           tctx.value.font = `34.07px 'AR LisuGB Medium'`;
-          if(userAgent.includes("Safari")){
-            tctx.value.strokeText(ra, 271, 604);
-            tctx.value.fillText(ra, 271.3, 603.1);
-          } else{
-            tctx.value.strokeText(ra, 271.3, 603.1);
-            tctx.value.fillText(ra, 271.3, 603.1);
+          tctx.value.strokeText(ra, 271.3, 603.1);
+          tctx.value.fillText(ra, 271.3, 603.1);
+          if(!isSafari){
             tctx.value.lineWidth = .2;
             tctx.value.strokeText(ra, 271.3, 603.1);
           }
-          
         } else if(type === "spell"){
           tctx.value.font = `34.24px 'AR LisuGB Medium'`;
-          if(userAgent.includes("Safari")){
-            tctx.value.strokeText(ra, 269.5, 606);
-            tctx.value.fillText(ra, 270.2, 605.4);
-          } else{
-            tctx.value.strokeText(ra, 270.2, 605.4);
-            tctx.value.fillText(ra, 270.2, 605.4);
+          tctx.value.strokeText(ra, 270.2, 605.4);
+          tctx.value.fillText(ra, 270.2, 605.4);
+          if(!isSafari){
             tctx.value.lineWidth = .2;
             tctx.value.strokeText(ra, 270.2, 605.4);
           }
@@ -1309,24 +1297,18 @@
       } else if(secRa !== ""){
         if(type === "minion"){
           tctx.value.font = `34.07px 'AR LisuGB Medium'`;
-          if(userAgent.includes("Safari")){
-            tctx.value.strokeText(secRa, 271, 604);
-            tctx.value.fillText(secRa, 271.3, 603.1);
-          } else{
-            tctx.value.strokeText(secRa, 271.3, 603.1);
-            tctx.value.fillText(secRa, 271.3, 603.1);
+          tctx.value.strokeText(secRa, 271.3, 603.1);
+          tctx.value.fillText(secRa, 271.3, 603.1);
+          if(!isSafari){
             tctx.value.lineWidth = .2;
             tctx.value.strokeText(secRa, 271.3, 603.1);
           }
           
         } else if(type === "spell"){
           tctx.value.font = `34.24px 'AR LisuGB Medium'`;
-          if(userAgent.includes("Safari")){
-            tctx.value.strokeText(secRa, 269.5, 606);
-            tctx.value.fillText(secRa, 270.2, 605.4);
-          } else{
-            tctx.value.strokeText(secRa, 270.2, 605.4);
-            tctx.value.fillText(secRa, 270.2, 605.4);
+          tctx.value.strokeText(secRa, 270.2, 605.4);
+          tctx.value.fillText(secRa, 270.2, 605.4);
+          if(!isSafari){
             tctx.value.lineWidth = .2;
             tctx.value.strokeText(secRa, 270.2, 605.4);
           }

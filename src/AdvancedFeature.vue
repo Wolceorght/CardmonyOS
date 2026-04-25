@@ -883,6 +883,22 @@
     height: 12em !important;
   }
 
+  .text-box textarea{
+    border-bottom: 1.5px solid var(--border-color);
+    transition: all .2s ease;
+  }
+  .text-box textarea:focus, .text-box textarea:active{
+    border-bottom: 1.5px solid var(--harmony-blue);
+  }
+
+  #back-button{
+    border-bottom: 1.5px solid var(--border-color);
+    transition: all .2s ease;
+  }
+  #back-button:active{
+    border-bottom: 1.5px solid var(--harmony-blue);
+  }
+
   @media (max-width: 1200px) {
     .subtitle-box h2{
       white-space: nowrap;

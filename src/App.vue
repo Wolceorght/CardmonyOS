@@ -212,15 +212,19 @@
 
   //改变下拉选择框展开、收起状态
   async function dropOption(val){
-    isOpened[val] = !isOpened[val];
+    if(val){
+      isOpened[val] = !isOpened[val];
+    }
     for(let i in isOpened){
       if(i !== val){
         isOpened[i] = false;
       }
     }
-    // 当展开 emblem 选择框时刷新自定义 emblem 列表
-    if (val === 'emblem' && isOpened[val]) {
-      await refreshCustomEmblems();
+    if(val){
+      // 当展开 emblem 选择框时刷新自定义 emblem 列表
+      if (val === 'emblem' && isOpened[val]) {
+        await refreshCustomEmblems();
+      }
     }
   }
 
@@ -513,6 +517,7 @@
                   placeholder="收集者沙库尔"
                   autocomplete="off"
                   maxlength="12"
+                  @focus="dropOption()"
                   v-model="name">
         </div>
       </div>
@@ -554,6 +559,7 @@
                   name="text"
                   placeholder="<b>潜行</b>。每当本随从攻击时，随机将一张<i>（你对手职业的）</i>牌置入你的手牌。"
                   autocomplete="off"
+                  @focus="dropOption()"
                   v-model="text">
         </textarea>
       </div>
@@ -568,7 +574,8 @@
                     name="cost"
                     placeholder="3"
                     autocomplete="off"
-                    :style="{width: `clamp(60%, calc(${cost ? cost.length : 0}ch + .5em), 100%`}"
+                    :style="{width: `clamp(60%, calc(${cost ? cost.length : 0}ch + .5em), 100%)`}"
+                    @focus="dropOption()"
                     v-model="cost">
           </div>
         </div>
@@ -583,7 +590,8 @@
                     name="attack"
                     placeholder="2"
                     autocomplete="off"
-                    :style="{width: `clamp(60%, calc(${attack ? attack.length : 0}ch + .5em), 100%`}"
+                    :style="{width: `clamp(60%, calc(${attack ? attack.length : 0}ch + .5em), 100%)`}"
+                    @focus="dropOption()"
                     v-model="attack">
           </div>
         </div>
@@ -599,7 +607,8 @@
                     name="health"
                     placeholder="4"
                     autocomplete="off"
-                    :style="{width: `clamp(60%, calc(${health ? health.length : 0}ch + .5em), 100%`}"
+                    :style="{width: `clamp(60%, calc(${health ? health.length : 0}ch + .5em), 100%)`}"
+                    @focus="dropOption()"
                     v-model="health">
           </div>
         </div>
@@ -616,6 +625,7 @@
                     name="runeBlood"
                     placeholder="0"
                     autocomplete="off"
+                    @focus="dropOption()"
                     @change="runeLimit('blood')"
                     v-model="rune.blood">
           </div>
@@ -631,6 +641,7 @@
                     name="runeFrost"
                     placeholder="0"
                     autocomplete="off"
+                    @focus="dropOption()"
                     @change="runeLimit('frost')"
                     v-model="rune.frost">
           </div>
@@ -646,6 +657,7 @@
                     name="runeUnholy"
                     placeholder="0"
                     autocomplete="off"
+                    @focus="dropOption()"
                     @change="runeLimit('unholy')"
                     v-model="rune.unholy">
           </div>
@@ -672,6 +684,7 @@
                   name="race"
                   placeholder="无"
                   autocomplete="off"
+                  @focus="dropOption()"
                   v-model="race">
         </div>
       </div>
@@ -685,6 +698,7 @@
                   name="secondRace"
                   placeholder="无"
                   autocomplete="off"
+                  @focus="dropOption()"
                   v-model="secondRace">
         </div>
       </div>
@@ -743,19 +757,20 @@
           <input type="file" 
                   name="image"
                   accept="image/*"
+                  @click="dropOption()"
                   @change="uploadImage()">
         </label>
       </div>
     </div>
 
     <div class="preview" v-if="isMobile">
-      <div class="command-button" @click="previewCard()">
+      <div class="command-button" @click="previewCard(); dropOption()">
         预览
       </div>
     </div>
 
     <div class="save">
-      <div class="command-button" @click="saveCard()">
+      <div class="command-button" @click="saveCard(); dropOption()">
         保存<span style="transform: translate(.15em, 0) rotate(15deg);">!</span>
       </div>
     </div>
@@ -1168,7 +1183,7 @@
   
   
   .text-box{
-    height: 10.5em;
+    height: 10.625em;
   }
   .text-box textarea{
     width: 100%;
@@ -1178,7 +1193,7 @@
     border-radius: 8px;
     outline: none;
     box-sizing: border-box;
-    padding: .25em;
+    padding: .4em;
     margin: 0;
     font: 300 1.25em var(--font-family);
     line-height: 1.5;
@@ -1277,6 +1292,19 @@
     pointer-events: none;
   }
 
+  .option .toggle-box, .input-box input, .text-box textarea, .image-box label, .command-button{
+    border-bottom: 1.5px solid var(--border-color);
+    transition: all .2s ease;
+  }
+  .option .toggle-box:focus, .input-box input:focus, .text-box textarea:focus, .image-box label:focus, .command-button:focus,
+  .option .toggle-box:active, .input-box input:active, .text-box textarea:active, .image-box label:active, .command-button:active{
+    border-bottom: 1.5px solid var(--harmony-blue);
+  }
+
+  .option.open .toggle-box{
+    border-bottom: 1.5px solid var(--harmony-blue) !important;
+  }
+  
   @media (max-width: 1200px) {
 
     .data{

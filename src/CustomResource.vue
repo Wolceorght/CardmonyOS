@@ -564,6 +564,22 @@ function addEmblemToDB(name, imgBlob){
     color: var(--shape-color);
   }
 
+  .input-box input, .image-box label, .submit-button{
+    border-bottom: 1.5px solid var(--border-color);
+    transition: all .2s ease;
+  }
+  .input-box input:focus, .image-box label:active, .submit-button:active{
+    border-bottom: 1.5px solid var(--harmony-blue);
+  }
+
+  #back-button{
+    border-bottom: 1.5px solid var(--border-color);
+    transition: all .2s ease;
+  }
+  #back-button:active{
+    border-bottom: 1.5px solid var(--harmony-blue);
+  }
+
   @media (max-width: 1200px) {
     #custom-button-box{
       margin-bottom: 0;
