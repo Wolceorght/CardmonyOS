@@ -841,7 +841,6 @@
       color = "#1e1710";
     }
     boldText.forEach(element => {
-      element.style.fontWeight = "400";
       /*
       let strokeWidth = ".05em";
       element.style.textShadow = `0 0 ${strokeWidth} ${color},
@@ -969,16 +968,21 @@
       return;
     }
 
+    textContent.style.fontSize = size + "px";
+    textContent.style.color = color;
+    textContent.style.whiteSpace = "pre-wrap";
+    textContent.style.lineHeight = "1.13";
+    boldText.forEach(element => {
+      element.style.lineHeight = "inherit";
+    })
+
     switch(type){
+      
       case "minion":
         x = 121, y = 454, w = 300, h = 128;
 
         textBox.style.width = "300px";
         textBox.style.height = "128px";
-        textContent.style.fontSize = size + "px";
-        textContent.style.color = color;
-        textContent.style.lineHeight = "1.13";
-        textContent.style.whiteSpace = "pre-wrap";
 
         leftShape.style.width = "128px";
         leftShape.style.height = "128px";
@@ -1001,10 +1005,6 @@
 
         textBox.style.width = "262px";
         textBox.style.height = "128px";
-        textContent.style.fontSize = size + "px";
-        textContent.style.color = color;
-        textContent.style.lineHeight = "1.13";
-        textContent.style.whiteSpace = "pre-wrap";
 
         leftShape.style.width = "128px";
         leftShape.style.height = "128px";
@@ -1034,10 +1034,6 @@
 
         textBox.style.width = "254px";
         textBox.style.height = "134px";
-        textContent.style.fontSize = size + "px";
-        textContent.style.color = color;
-        textContent.style.lineHeight = "1.13";
-        textContent.style.whiteSpace = "pre-wrap";
 
         leftShape.style.width = "100px";
         leftShape.style.height = "134px";
@@ -1072,10 +1068,6 @@
 
         textBox.style.width = "260px";
         textBox.style.height = "122px";
-        textContent.style.fontSize = size + "px";
-        textContent.style.color = color;
-        textContent.style.lineHeight = "1.13";
-        textContent.style.whiteSpace = "pre-wrap";
         
         leftShape.style.width = "122px";
         leftShape.style.height = "122px";

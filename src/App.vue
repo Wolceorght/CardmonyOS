@@ -514,7 +514,7 @@
         <div>
           <input type="text"
                   name="name"
-                  placeholder="收集者沙库尔"
+                  placeholder="闪狐"
                   autocomplete="off"
                   maxlength="12"
                   @focus="dropOption()"
@@ -557,7 +557,7 @@
       <div class="text-box">
         <textarea ref="textAreaRef"
                   name="text"
-                  placeholder="<b>潜行</b>。每当本随从攻击时，随机将一张<i>（你对手职业的）</i>牌置入你的手牌。"
+                  placeholder="<b>战吼：</b>随机将一张<i>（你对手职业的）</i>卡牌置入你的手牌。"
                   autocomplete="off"
                   @focus="dropOption()"
                   v-model="text">
@@ -588,7 +588,7 @@
           <div>
             <input type="text"
                     name="attack"
-                    placeholder="2"
+                    placeholder="3"
                     autocomplete="off"
                     :style="{width: `clamp(60%, calc(${attack ? attack.length : 0}ch + .5em), 100%)`}"
                     @focus="dropOption()"
@@ -605,7 +605,7 @@
           <div>
             <input type="text"
                     name="health"
-                    placeholder="4"
+                    placeholder="3"
                     autocomplete="off"
                     :style="{width: `clamp(60%, calc(${health ? health.length : 0}ch + .5em), 100%)`}"
                     @focus="dropOption()"

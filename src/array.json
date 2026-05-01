@@ -195,6 +195,10 @@
       "name": "迅猛龙年核心系列"
     },
     {
+      "value": "cs2026",
+      "name": "甲虫年核心系列"
+    },
+    {
       "value": "naxx",
       "name": "纳克萨玛斯的诅咒"
     },
@@ -407,6 +411,10 @@
     {
       "value": "att",
       "name": "穿越时间流"
+    },
+    {
+      "value": "cat",
+      "name": "大地的裂变"
     }
   ],
   "keyWordArray": [
