@@ -88,7 +88,7 @@
                       props.secondRace,
                       props.chosen);
     }
-  }, 100);
+  }, 200);
 
   watch(  
     [props, loaded], (newVal) => {
@@ -419,7 +419,12 @@
     }
   }
 
+  const isDrawingFrame = ref(false);
   async function drawFrame(atk, hp, ru, ra, secRa, ena, cho){
+    if(isDrawingFrame.value){
+      return;
+    }
+    isDrawingFrame.value = true;
 
     fctx.value.clearRect(0, 0, width.value, height.value);
 
@@ -526,6 +531,8 @@
       fctx.value.drawImage(await getImg("power-base"), 0, 0);
       fctx.value.drawImage(await getImg("power-cost"), 0, 0);
     }
+
+    isDrawingFrame.value = false;
   }
 
   function drawStrokedNumber(str, size, x, y){
@@ -1308,7 +1315,12 @@
       }
   }
 
+  const isDrawingTexts = ref(false);
   function drawTexts(na, co, atk, hp, te, ra, secRa, cho){
+    if(isDrawingTexts.value){
+      return;
+    }
+    isDrawingTexts.value = true;
     
     tctx.value.clearRect(0, 0, width.value, height.value);
 
@@ -1349,6 +1361,8 @@
     if(te !== "" && strLength(te)){
       drawText(te, cho.type);
     }
+
+    isDrawingTexts.value = false;
   }
 
   function adjustIllustration(url, cho){
