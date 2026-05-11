@@ -605,9 +605,10 @@
 
     switch(type){
       case "minion":{
-        x = 108.57, y = 349.56;
-        w = 320, h = 70;
+        x = 98.57, y = 349.56;
+        w = 340, h = 70;
         dy1 = .75, dy2 = .25;
+        size = 37;
 
         svg.setAttribute("width", w);
         svg.setAttribute("height", h);
@@ -620,7 +621,7 @@
           nameBox.setAttribute("style", "transform: perspective(100px)");
         }
 
-        svgPath.setAttribute("d", "M-165.0601 14.4342c0 0 27.869 12.5645 96.9358-5.684 61.5273-16.1543 118.6117-20.1929 140.2876-20.1929 21.5413 0 63.0082 3.1411 87.7807 20.1929");
+        svgPath.setAttribute("d", "M -165.0601 15.4342 c 0 0 27.869 12.5645 96.9358 -5.684 c 61.5273 -16.1543 118.6117 -20.1929 140.2876 -20.1929 c 21.5413 0 63.0082 3.1411 87.7807 20.1929");
 
         svgText.setAttribute("letter-spacing", ".01em");
         svgText.setAttribute("dy", "6.67");
