@@ -362,14 +362,17 @@
     rune.value.unholy = runeTemp.unholy,
     text.value = textTemp,
     race.value = raceTemp,
-    secondRace.value = secondRaceTemp,
+    secondRace.value = secondRaceTemp;
 
     isEnabled.value.secondClass = isEnabledTemp.secondClass,
     isEnabled.value.multiClass = isEnabledTemp.multiClass,
     isEnabled.value.dragon = isEnabledTemp.dragon,
     isEnabled.value.secondRace = isEnabledTemp.secondRace,
-    isEnabled.value.mini = isEnabledTemp.mini,
+    isEnabled.value.mini = isEnabledTemp.mini;
 
+    if(chosen.value.rarity === chosenTemp.rarity){
+      chosen.value.changeWhenRarityRemains = !chosen.value.changeWhenRarityRemains;
+    }
     chosen.value.type = chosenTemp.type,
     chosen.value.class  = chosenTemp.class,
     chosen.value.secondClass = chosenTemp.secondClass,

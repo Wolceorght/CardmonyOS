@@ -49,7 +49,8 @@
           multiClass: "none",
           rarity: "free",
           banner: "none",
-          emblem: "none"
+          emblem: "none",
+          changeWhenRarityRemains: false
         })
 
   const isMobile = ref(false),
@@ -175,6 +176,10 @@
         isEnabled.dragon = true;
       } else{
         isEnabled.dragon = false;
+      }
+      //文字稿连续传入两次传说稀有度时避免龙框不响应
+      if((newVal.changeWhenRarityRemains || !newVal.changeWhenRarityRemains) && newVal.rarity === "legendary"){
+        isEnabled.dragon = true;
       }
 
       //防止加载不存在的迷你系列水印
