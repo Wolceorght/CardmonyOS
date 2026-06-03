@@ -1089,7 +1089,7 @@
     max-height: 15em;
   }  
   .banner .option.open ul{
-    max-height: 9em;
+    max-height: 12em;
   }
 
   .divider{

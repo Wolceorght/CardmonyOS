@@ -139,6 +139,10 @@
     {
       "value": "forge",
       "name": "锻造"
+    },
+    {
+      "value": "prepare",
+      "name": "预备"
     }
   ],
   "emblemArray": [
@@ -161,6 +165,10 @@
     {
       "value": "event",
       "name": "活动"
+    },
+    {
+      "value": "event-old",
+      "name": "活动（旧）"
     },
     {
       "value": "dhi",
@@ -341,6 +349,10 @@
     {
       "value": "cat",
       "name": "大地的裂变"
+    },
+    {
+      "value": "evh",
+      "name": "逃离紫罗兰监狱"
     }
   ],
   "miniEmblemArray": [
@@ -415,6 +427,10 @@
     {
       "value": "cat",
       "name": "大地的裂变"
+    },
+    {
+      "value": "evh",
+      "name": "逃离紫罗兰监狱"
     }
   ],
   "keyWordArray": [
