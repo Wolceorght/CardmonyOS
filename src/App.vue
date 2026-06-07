@@ -39,7 +39,8 @@
           multiClass: false,
           dragon: false,
           secondRace: false,
-          mini: false
+          mini: false,
+          multiTag: true
         })
 
   const chosen = reactive({
@@ -432,7 +433,17 @@
     </div>
 
     <div class="optional-class" v-show="isEnabled.multiClass">
-      <div class="subtitle-box"><h2>多职业阵营</h2></div>
+      <div class="subtitle-box">
+        <h2>多职业阵营</h2>
+        <div class="checkbox">
+          <label>
+            飘带
+            <input type="checkbox" 
+                    name="multiTag" 
+                    v-model="isEnabled.multiTag">
+          </label>
+        </div>
+      </div>
       <div class="select">
         <div class="option" :class="{'open': isOpened.optionalClass}">
           <div class="toggle-box" @click="dropOption('optionalClass')">

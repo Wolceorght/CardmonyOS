@@ -446,7 +446,9 @@
       }
 
       if(ena.multiClass){
-        fctx.value.drawImage(await getImg("multi-class"), 0, 0);
+        if(ena.multiTag){
+          fctx.value.drawImage(await getImg("multi-class"), 0, 0);
+        }
         if(cho.multiClass !== "none"){
           fctx.value.drawImage(await getImg(`camp-${cho.multiClass}`), 0, 0);
         }
