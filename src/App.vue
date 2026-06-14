@@ -197,7 +197,10 @@
         chosen.banner = "tradeable";
       } else if(newVal.includes("<b>锻造：</b>")){
         chosen.banner = "forge";
-      } else{
+      } else if(newVal.search(/<b>预备[。，]?(?=<\/b>(?:\r?\n|[。，]|$))/) !== -1) {
+        chosen.banner = "prepare";
+      }
+      else{
         chosen.banner = "none";
       }
     }
