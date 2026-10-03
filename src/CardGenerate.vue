@@ -1429,7 +1429,7 @@
       const mx = e.clientX - i.value.getBoundingClientRect().left,
             my = e.clientY - i.value.getBoundingClientRect().top;
 
-      const newScale = e.deltaY < 0 ? scale * 1.1 : scale / 1.1;
+      const newScale = e.deltaY < 0 ? scale * 1.02 : scale / 1.02;
       if(newScale < 0.05 || newScale > 5) return;
 
       const factor = newScale / scale;

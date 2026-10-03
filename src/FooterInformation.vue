@@ -30,6 +30,18 @@ import { versionInfo } from './log.json';
       document.body.style.overflow = "auto";
     }
   }
+  const isAboutDisplaying = ref(false);
+  function displayAbout(){
+    const container = document.getElementById("about-container");
+    isAboutDisplaying.value = !isAboutDisplaying.value;
+    if(isAboutDisplaying.value){
+      container.style.maxHeight = "100dvh";
+      document.body.style.overflow = "hidden";
+    } else if(!isAboutDisplaying.value){
+      container.style.maxHeight = "0";
+      document.body.style.overflow = "auto";
+    }
+  }
 </script>
 
 <template>
@@ -43,6 +55,10 @@ import { versionInfo } from './log.json';
 
       <br>
 
+      <a id="about" @click="displayAbout()">
+        关于本站
+      </a>
+      <span class="vertical-bar">|</span>
       <a href="https://keshu.space/">
         薄露轩
       </a>
@@ -54,6 +70,60 @@ import { versionInfo } from './log.json';
       <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=mestg42%2FaLEfITqBGiOhiSql8V3UePQHyT9%2Fp%2FmNt%2BzRAUUafC4SXmVGr4OB842V&busi_data=eyJncm91cENvZGUiOiIxMDk3MTU1MTk1IiwidG9rZW4iOiIwM05EcG9wZU13LzlTN1orbFFvTW1Oby9RK3hFOXhWZlFHbSt0RWU1ZWhDdGpyVVJlZTZQRnZscnc3THZwWCt2IiwidWluIjoiMzE1NzM5NDc2In0%3D&data=3c_UxdQVs-45Dyw8H-DDK5336WpMFpgmr7Yi5Tzzv-xVruVuJqK7951XNbMOBvKi0d_wVpMMklneZTxriaN_Hg&svctype=4&tempid=h5_group_info">
         反馈群
       </a>
+    </div>
+  </div>
+
+  <div id="about-container">
+    <div id="about-box">
+      <div id="about-frame">
+        <svg width="32" height="32" style="position: absolute; top: -16px; left: -16px" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="0" x2="32" y2="0" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="0" y1="0" x2="0" y2="32" stroke="#1a69fc" stroke-width="16"></line>
+        </svg>
+        <svg width="32" height="32" style="position: absolute; top: -16px; right: -16px" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="0" x2="32" y2="0" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="32" y1="0" x2="32" y2="32" stroke="#1a69fc" stroke-width="16"></line>
+        </svg>
+        <svg width="32" height="32" style="position: absolute; bottom: -16px; left: -16px" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="0" x2="0" y2="32" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="0" y1="32" x2="32" y2="32" stroke="#1a69fc" stroke-width="16"></line>
+        </svg>
+        <svg width="32" height="32" style="position: absolute; bottom: -16px; right: -16px" xmlns="http://www.w3.org/2000/svg">
+          <line x1="32" y1="0" x2="32" y2="32" stroke="#1a69fc" stroke-width="16"></line>
+          <line x1="0" y1="32" x2="32" y2="32" stroke="#1a69fc" stroke-width="16"></line>
+        </svg>
+      </div>
+      <div id="about-title">
+        关于本站
+      </div>
+      <div id="about-text">
+        一、本站是一个卡牌制作工具，仅提供技术工具和模板功能。本站不参与用户创作，不对用户上传、制作、导出的内容进行事前审查，也不对用户作品的合法性、真实性、准确性、原创性、适当性作出保证。本站为非官方性质，与《炉石传说》官方无隶属、合作或授权关系；用户不得利用本站冒充官方、发布虚假公告、制作足以误导他人的“官方卡牌”及类似内容。
+<br><br>
+二、为尽量还原卡牌效果，本站可能使用或模拟部分游戏内字体、UI元素及图片素材，以上素材均来自于公开渠道。本站使用相关字体或素材的唯一目的是还原游戏内卡牌的视觉呈现，属于《中华人民共和国著作权法》第二十四条所规定的“为个人学习、研究或者欣赏”的合理使用情形，未将字体或素材用于任何商业性用途。
+<br><br>
+三、用户对通过本站上传、制作、导出的卡牌内容承担全部责任。因用户制作、发布、传播内容引发的纠纷、投诉、索赔、处罚或其他后果，由用户自行承担。
+<br><br>
+四、用户不得利用本站制作、上传、复制、发布或传播含有下列内容的信息：
+<br>
+1. 违反宪法、法律法规或公序良俗的内容；<br>
+2. 危害国家安全、泄露国家秘密、破坏民族团结、宣扬邪教或封建迷信的内容；<br>
+3. 煽动暴力、恐怖、仇恨、歧视、骚扰、霸凌的内容；<br>
+4. 色情、低俗、赌博、诈骗、传销、违法广告等内容；<br>
+5. 侵犯他人著作权、商标权、肖像权、名誉权、隐私权或其他合法权益的内容；<br>
+6. 伪造身份证、护照、驾驶证、工作证、公章、公文、货币、票券、官方文件等用于冒充或欺骗的内容；<br>
+7. 冒充官方、误导公众、虚构权威机构或虚假认证的内容；<br>
+8. 其他本站认为不适宜或可能带来法律风险的内容。<br>
+<br>
+五、本站生成内容仅供个人学习、测试、娱乐或非商业展示使用，且不得违反法律法规和第三方权利。未经合法授权，不得将生成内容用于商业销售、付费下载、广告投放、品牌宣传、印刷出版、众筹回报、客户交付等商业用途。用户不得以本站名义发布内容，也不得声称本站或生成内容获得任何官方认可。
+<br><br>
+六、本站尊重著作权人的合法权益，如您认为本站内容或用户生成内容侵犯了您的合法权益，请联系 wolceorght@gmail.com，本站将及时删除或替换。
+<br><br>
+七、本站可能不时更新该声明。更新后将在本页面公布，公布后即视为生效。继续使用本站则视为接受更新后的声明。
+      </div>
+      
+    </div>
+    <div id="about-back-button" @click="displayAbout()">
+      返回
     </div>
   </div>
 
@@ -157,7 +227,7 @@ import { versionInfo } from './log.json';
     color: var(--shape-color);
   }
 
-  #ver-container{
+  #ver-container, #about-container{
     width: 100%;
     height: 100dvh;
     max-height: 0;
@@ -170,7 +240,7 @@ import { versionInfo } from './log.json';
     transition: max-height .5s ease;
   }
 
-  #ver-box{
+  #ver-box, #about-box{
     width: 1200px;
     height: 70%;
     margin: 6.75em auto 4em auto;
@@ -184,7 +254,7 @@ import { versionInfo } from './log.json';
   }
 
   
-  #ver-frame{
+  #ver-frame, #about-frame{
     width: inherit;
     height: inherit;
     position: absolute;
@@ -192,7 +262,7 @@ import { versionInfo } from './log.json';
     transform: translate(-2em, -2em);
   }
 
-  #ver-title{
+  #ver-title, #about-title{
     width: fit-content;
     margin-bottom: 2em;
     font-size: 3em;
@@ -264,7 +334,7 @@ import { versionInfo } from './log.json';
     margin: 4em auto 0 auto;
   }
 
-  #back-button{
+  #back-button, #about-back-button{
     width: 5em;
     margin: 0 auto;
     display: flex;
@@ -279,17 +349,23 @@ import { versionInfo } from './log.json';
     cursor: pointer;
     user-select: none;
   }  
-  #back-button:active{
+  #back-button:active, #about-back-button:active{
     background-color: var(--hover-color);
     color: var(--shape-color);
   }
 
-  #back-button{
+  #back-button, #about-back-button{
     border-bottom: 1.5px solid var(--border-color);
     transition: all .2s ease;
   }
-  #back-button:active{
+  #back-button:active, #about-back-button:active{
     border-bottom: 1.5px solid var(--harmony-blue);
+  }
+
+  #about-text{
+    font-size: 1.25em;
+    font-weight: 300;
+    line-height: 1.5;
   }
 
   @media (max-width: 1200px) {
@@ -301,18 +377,18 @@ import { versionInfo } from './log.json';
       padding: 0;
     }
 
-    #back-button{
+    #back-button, #about-back-button{
       width: calc(100% - 2em);
       margin: 0 1em;
     }
 
-    #ver-box{
+    #ver-box, #about-box{
       width: 100%;
       margin: 4em auto;
       max-width: 750px;
     }
 
-    #ver-frame{
+    #ver-frame, #about-frame{
       display: none;
     }
 
@@ -334,7 +410,7 @@ import { versionInfo } from './log.json';
       color: var(--shape-color);
     }
 
-    #back-button:hover{
+    #back-button:hover, #about-back-button:hover{
       background-color: var(--hover-color);
       color: var(--shape-color);
     }
@@ -357,6 +433,10 @@ import { versionInfo } from './log.json';
     #ver-box::-webkit-scrollbar-button{
       height: 4px;
       background-color: transparent;
+    }
+
+    #about:hover{
+      cursor: pointer;
     }
   }
 
