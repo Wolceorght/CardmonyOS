@@ -54,6 +54,8 @@
           changeWhenRarityRemains: false
         })
 
+  const textOnly = ref(false);
+
   const isMobile = ref(false),
         isPreviewed = ref(false),
         customEmblems = ref([]);
@@ -828,6 +830,7 @@
           <line x1="405" y1="502" x2="405" y2="470" stroke="#1a69fc" stroke-width="16"></line>
         </g>
       </svg>
+      <div class="text-only-button" @click="textOnly = ! textonly">仅描述</div>
       <CardGenerate :name="name" 
                     :cost="cost" 
                     :attack="attack"
@@ -840,6 +843,7 @@
                     :chosen="chosen"
                     :img-url="imgUrl"
                     :is-previewed="isPreviewed"
+                    :text-only="textOnly"
                     @preview-card-request="previewCard()"
                     ref="result">
       </CardGenerate>
@@ -1322,6 +1326,16 @@
 
   .option.open .toggle-box{
     border-bottom: 1.5px solid var(--harmony-blue) !important;
+  }
+
+  .text-only-button{
+    position:absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 9999;
+    line-height: 1;
+    font-weight: 500;
+    cursor: pointer;
   }
   
   @media (max-width: 1200px) {

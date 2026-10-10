@@ -16,6 +16,8 @@
     chosen: Object,
 
     imgUrl: String,
+
+    textOnly: Boolean,
     
     isPreviewed: Boolean
   })
@@ -72,7 +74,11 @@
   // 防抖处理的绘制函数
   const debouncedDraw = debounce(async () => {
     if(loaded.value && fctx.value !== null && tctx.value !== null){
-      await drawFrame(props.attack, 
+      if(props.textOnly){
+        await drawFrame('', '', '', '', '', '', '');
+        await drawTexts('', '', '', '', props.text, '', '', props.chosen);
+      } else {
+        await drawFrame(props.attack, 
                       props.health, 
                       props.rune, 
                       props.race,
@@ -87,6 +93,8 @@
                       props.race,
                       props.secondRace,
                       props.chosen);
+      }
+      
     }
   }, 200);
 
